@@ -1,0 +1,81 @@
+# SPDX-FileCopyrightText: 2026 Merkator Group
+# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
+#
+# Citation metadata in Citation File Format (CFF) v1.2.0.
+# GitHub renders this automatically as a "Cite this repository" button
+# on the project landing page. https://citation-file-format.github.io/
+#
+# The identifiers: block under preferred-citation should be filled in
+# with the Zenodo DOI once the v1.0.0 GitHub Release is published and
+# the GitHub <-> Zenodo integration mints the DOI. Until then the
+# repository URL is the canonical identifier.
+
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+type: software
+title: "Robust Halley's Method for the Chord-Length Parameter L in Clothoid G^1 Hermite Interpolation"
+authors:
+  - given-names: Jeroen
+    family-names: Bloemscheer
+    affiliation: "Merkator Group"
+    email: jeroen.bloemscheer@merkator.com
+
+repository-code: "https://github.com/grootstebozewolf/clothoid-halley-coq"
+url:             "https://github.com/grootstebozewolf/clothoid-halley-coq"
+
+version:         "1.0.0"
+date-released:    2026-05-11
+
+license:        "LicenseRef-Merkator-Proprietary-NoAITraining"
+license-url:    "https://github.com/grootstebozewolf/clothoid-halley-coq/blob/main/LICENSE"
+
+keywords:
+  - clothoid
+  - "Euler spiral"
+  - "numerical analysis"
+  - "Halley's method"
+  - "Newton's method"
+  - "formal verification"
+  - "machine-checked proof"
+  - Coq
+  - Coquelicot
+  - "G^1 Hermite interpolation"
+  - "railway alignment"
+  - GIS
+  - "computational geometry"
+  - "scientific computing"
+
+abstract: >-
+  A numerically robust, cubic-convergent solver based on Halley's
+  method for the nonlinear chord-length residual formulation of the
+  clothoid (Euler spiral) G^1 Hermite interpolation problem. Operates
+  directly on the arc-length parameter L using fixed 32-point
+  Gauss-Legendre quadrature for the six moment integrals that define
+  the residual f(L) and its first two analytic derivatives. The four
+  primitive integral derivatives and the residual second-derivative
+  identity are machine-checked in Coq using the Coquelicot
+  real-analysis library, with no Admitted lemmas. Production-grade
+  reference implementations in Python, C# (.NET 8), Java 21, and
+  TypeScript (Node.js) are bit-identical to within 1e-9 m on every
+  case of a 9,058-record benchmark corpus drawn from the public
+  ProRail Spoorgeometrie railway-geometry dataset.
+
+preferred-citation:
+  type: software
+  title: "Robust Halley's Method for the Chord-Length Parameter L in Clothoid G^1 Hermite Interpolation"
+  authors:
+    - given-names: Jeroen
+      family-names: Bloemscheer
+      affiliation: "Merkator Group"
+      email: jeroen.bloemscheer@merkator.com
+  version:      "1.0.0"
+  year:         2026
+  date-released: 2026-05-11
+  url:          "https://github.com/grootstebozewolf/clothoid-halley-coq"
+  # identifiers:
+  #   - type: doi
+  #     value: 10.5281/zenodo.XXXXXXX   # Concept DOI (all versions)
+  #     description: "Zenodo concept DOI for clothoid-halley-coq (all versions)"
+  #   - type: doi
+  #     value: 10.5281/zenodo.YYYYYYY   # Version DOI (v1.0.0)
+  #     description: "Zenodo DOI for clothoid-halley-coq v1.0.0"
