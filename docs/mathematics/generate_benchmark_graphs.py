@@ -41,7 +41,7 @@ for bar in bars2:
                 ha='center', va='bottom', fontsize=10, fontweight='bold')
 
 plt.tight_layout()
-plt.savefig('/home/workdir/artifacts/iterations_comparison.png', dpi=150, bbox_inches='tight')
+plt.savefig('iterations_comparison.png', dpi=150, bbox_inches='tight')
 plt.close()
 
 # Figure 2: Time
@@ -73,7 +73,7 @@ for bar in bars2:
                 ha='center', va='bottom', fontsize=10, fontweight='bold')
 
 plt.tight_layout()
-plt.savefig('/home/workdir/artifacts/time_comparison.png', dpi=150, bbox_inches='tight')
+plt.savefig('time_comparison.png', dpi=150, bbox_inches='tight')
 plt.close()
 
 print("Graphs generated successfully!")
