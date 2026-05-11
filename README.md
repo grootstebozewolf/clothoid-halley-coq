@@ -1,5 +1,7 @@
 # clothoid-halley-coq
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20128416.svg)](https://doi.org/10.5281/zenodo.20128416)
+
 A robust Halley solver for the chord-length parameter of the clothoid
 (Euler-spiral) $G^1$ Hermite interpolation problem, with a Coq
 formalisation of the underlying derivative identities, three production

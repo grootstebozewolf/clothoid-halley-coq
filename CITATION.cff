@@ -60,6 +60,11 @@ abstract: >-
   case of a 9,058-record benchmark corpus drawn from the public
   ProRail Spoorgeometrie railway-geometry dataset.
 
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.20128416
+    description: "Zenodo DOI for clothoid-halley-coq v1.0.0"
+
 preferred-citation:
   type: software
   title: "Robust Halley's Method for the Chord-Length Parameter L in Clothoid G^1 Hermite Interpolation"
@@ -72,10 +77,8 @@ preferred-citation:
   year:         2026
   date-released: 2026-05-11
   url:          "https://github.com/grootstebozewolf/clothoid-halley-coq"
-  # identifiers:
-  #   - type: doi
-  #     value: 10.5281/zenodo.XXXXXXX   # Concept DOI (all versions)
-  #     description: "Zenodo concept DOI for clothoid-halley-coq (all versions)"
-  #   - type: doi
-  #     value: 10.5281/zenodo.YYYYYYY   # Version DOI (v1.0.0)
-  #     description: "Zenodo DOI for clothoid-halley-coq v1.0.0"
+  doi:          "10.5281/zenodo.20128416"
+  identifiers:
+    - type: doi
+      value: 10.5281/zenodo.20128416
+      description: "Zenodo DOI for v1.0.0"
