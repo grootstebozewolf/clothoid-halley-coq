@@ -1,97 +1,121 @@
 # clothoid-halley-coq
 
-Halley iteration for clothoid (Euler-spiral) fitting, with a Coq formalization
-of the key derivative identities under Coquelicot.
+A robust Halley solver for the chord-length parameter of the clothoid
+(Euler-spiral) $G^1$ Hermite interpolation problem, with a Coq
+formalisation of the underlying derivative identities, three production
+implementations (C# / Java / TypeScript), and a 9,058-record real-world
+benchmark on the ProRail Spoorgeometrie dataset.
 
-## What's here
+> **Repository status: public — proprietary (source-available).**
+> The full source is open for reading and academic evaluation. It is
+> **not open source**: see the [License](#license) section below before
+> running, modifying, or redistributing any of it.
+> The accompanying paper is at
+> [`docs/mathematics/Clothoid_L_Halley_Solver.pdf`](docs/mathematics/Clothoid_L_Halley_Solver.pdf).
 
-### `coq/`
+---
 
-Three Coq files, all compile cleanly under Coq 8.13.1 + Coquelicot 3.x and pass
-`coqchk` with no `type-in-type`, no unsafe (co)fixpoints, no positivity holes.
+## Contents
 
-- **`Clothoid.v`** — Bertolazzi–Frego G¹ residual `f(A) = Y₀(2A, δ−A, φ₀)`.
-  Proves `f'(A) = ∫(t²−t)·cos(φ)` and `f''(A) = −∫(t²−t)²·sin(φ)` via
-  parameter-differentiation under the integral (Coquelicot's
-  `is_derive_RInt_param_aux`).
-- **`Clothoid_L.v`** — chord-length residual `f(L) = L²·(P²+Q²) − d²` viewed
-  as a function of L. Proves the four integral-level derivatives
-  `P'=−T`, `Q'=R`, `R'=−S2s`, `T'=S2c` and the first-derivative composite
-  `f'(L) = 2L(P²+Q²) + 2L²(QR−PT)`. One lemma (`f_L_second_eq`) remains
-  admitted; details below.
-- **`ClothoidPolish.v`** — moment-notation polish: defines `f`, `Xₖ`, `Yₖ`
-  per Bertolazzi–Frego and proves `f'(A) = X₂−X₁` and the integral identity
-  `−(Y₄−2Y₃+Y₂) = ∫−(t²−t)²·sin(φ)` (`Y_pattern_eq`).
+### `coq/` — Formal verification
 
-#### Build
+Three Coq files; all compile cleanly under Coq 8.13.1 and Coq 8.20.1 with
+Coquelicot 3.x, pass `coqchk` with no `type-in-type`, no unsafe
+(co)fixpoints, no positivity holes, and **no `Admitted` or `Axiom`**
+beyond the four standard axioms used by Coquelicot itself (classical
+logic, decidable Dedekind reals, functional extensionality).
 
+- **`Clothoid.v`** — Bertolazzi–Frego $G^1$ residual $f(A) = Y_0(2A, \delta - A, \varphi_0)$. Proves $f'(A) = \int(t^2-t)\cos\varphi$ and $f''(A) = -\int(t^2-t)^2\sin\varphi$ via parameter-differentiation under the integral.
+- **`Clothoid_L.v`** — chord-length residual $f(L) = L^2(P^2 + Q^2) - d^2$. Proves the four integral-level derivatives $P' = -T$, $Q' = R$, $R' = -S_{2s}$, $T' = S_{2c}$, the first-derivative composite, and the closed (no `Admitted`) second-derivative composite via `auto_derive` + `Derive` rewrites + `ring`.
+- **`ClothoidPolish.v`** — moment-notation polish: proves $f'(A) = X_2 - X_1$ and the integral identity $-(Y_4 - 2 Y_3 + Y_2) = \int -(t^2-t)^2 \sin\varphi$.
+
+```bash
+cd coq && make
 ```
-coqc Clothoid.v
-coqc Clothoid_L.v
-coqc -R . "" ClothoidPolish.v
-coqchk -silent -o Clothoid Clothoid_L
-coqchk -silent -o -R . "" ClothoidPolish
+
+### `python/` — Reference implementation, derivations, benchmarks
+
+- **Symbolic derivations** (`clothoid_*_derive*.py`): SymPy-verified $f'$, $f''$ for the $A$- and $L$-formulations.
+- **Reference solver** (`clothoid_halleyL_bench.py`): the canonical Halley / Newton solver every other implementation is bit-compared against.
+- **Data pipeline**:
+  - `fetch_prorail_clothoids.py` → fetches all `Overgangsboog` records from the ProRail Spoorgeometrie ArcGIS service into `data/prorail_clothoids.json.gz` (CC BY 4.0).
+  - `build_golden_vectors.py` → filters monotone-branch + runs both solvers → `data/golden_vectors.json` (9,058 cases).
+  - `bench_corpus.py` + `run_all_benches.py` → drives the four-language benchmark, writes `data/benchmark_results.json`.
+
+### `csharp/` — C# (.NET 8) implementation
+
+`Clothoid.Halley` library + xUnit golden-vector tests + benchmark harness. See [csharp/README.md](csharp/README.md). Bit-identical to the Python reference on every case in the 9,058-record corpus (chord-length agreement within $10^{-9}$ m, iteration counts match exactly). Median Halley solve: **0.59 µs**.
+
+### `java/` — Java 21 implementation
+
+Maven project producing a shaded JAR + JUnit 5 golden-vector tests + benchmark. See [java/README.md](java/README.md). Same numerical agreement guarantees. Median Halley solve: **1.38 µs**.
+
+### `typescript/` — TypeScript / Node.js implementation
+
+Zero-runtime-dependency ESM module + `node:test` golden-vector suite + benchmark. See [typescript/README.md](typescript/README.md). Same numerical agreement guarantees. Median Halley solve: **0.88 µs**.
+
+### `docs/mathematics/` — Academic paper
+
+- `Clothoid_L_Halley_Solver.tex` — the LaTeX source.
+- `Clothoid_L_Halley_Solver.pdf` — the rendered paper (7 pages, includes the formal-verification section and the cross-language benchmark table).
+- `references.bib` — the bibliography (Bertolazzi & Frego 2015 / 2018, Coquelicot, Householder, Vázquez-Méndez & Casal).
+- `generate_benchmark_graphs.py` — renders the bar charts from `data/benchmark_results.json`.
+
+### `data/` — Datasets
+
+- `prorail_clothoids.json.gz` — raw snapshot of 9,058 ProRail clothoid transitions (CC BY 4.0 ProRail Spoorgeometrie; see `data/LICENSE_DATA.txt`).
+- `golden_vectors.json` — filtered + solved corpus, consumed by every language's test and benchmark harness.
+- `benchmark_results.json` — measured per-language Halley / Newton numbers.
+
+---
+
+## End-to-end reproduction
+
+```bash
+# 1. Re-fetch the ProRail snapshot (skip if you trust the committed copy).
+python python/fetch_prorail_clothoids.py
+
+# 2. Rebuild golden vectors from the snapshot.
+python python/build_golden_vectors.py
+
+# 3. Run the four-language tests.
+dotnet test  csharp/Clothoid.Halley.Tests
+mvn -f java/pom.xml test
+cd typescript && npm install && npm test && cd ..
+
+# 4. Run the cross-language benchmark.
+python python/run_all_benches.py
+
+# 5. Regenerate the bar charts.
+python docs/mathematics/generate_benchmark_graphs.py
+
+# 6. Rebuild the PDF (requires pdflatex / texlive).
+cd docs/mathematics && pdflatex Clothoid_L_Halley_Solver.tex \
+                    && bibtex   Clothoid_L_Halley_Solver \
+                    && pdflatex Clothoid_L_Halley_Solver.tex \
+                    && pdflatex Clothoid_L_Halley_Solver.tex
 ```
 
-#### Axioms
+Toolchain used for the committed numbers: Coq 8.20.1 + Coquelicot 3.x;
+Python 3.14 + NumPy + SciPy + Matplotlib; .NET 8 / .NET 10 SDK; OpenJDK 21
+(Corretto); Node.js 22; TeX Live 2026.
 
-All proved theorems use only Coq's standard four axioms (classical logic,
-decidable Dedekind reals, functional extensionality) — the same axioms
-underlying Coquelicot's analysis library. Verified with `Print Assumptions`.
+---
 
-#### The one remaining admit
+## License
 
-`f_L_second_eq` in `Clothoid_L.v` — the composite second derivative on L. The
-analytical content (the four integral-level derivatives `is_derive_P/Q/R/T`)
-is fully proved; the admit is mechanical product-rule composition. The
-obstacle is Coq's typeclass-vs-Reals unifier hitting deeper-than-first-order
-nestings: Coquelicot's `is_derive_mult` etc. use generic `plus`/`mult` while
-expressions use `Rplus`/`Rmult`. The first-derivative composite escapes this
-by careful explicit instances; the second derivative's deeper tree does not.
-A clean fix is documented in the source: ~100–200 lines of explicit
-instances or a dedicated `Ltac` for derive-composition.
+This repository is **public** but **not open source**.
 
-### `python/`
+- All code, documentation, build configuration, and the manuscript text
+  are covered by a proprietary licence — see [LICENSE](LICENSE) — that
+  grants narrow permissions for *reading*, *academic citation*, and
+  *unmodified execution to reproduce the paper's results*. All other
+  uses (commercial use, redistribution, derivative works, model
+  training) require a separate written licence from Merkator Group.
+- The two data files `data/prorail_clothoids.json.gz` and
+  `data/golden_vectors.json` are derived from ProRail Spoorgeometrie
+  and are redistributed under **CC BY 4.0** (see
+  [data/LICENSE_DATA.txt](data/LICENSE_DATA.txt)). That licence applies
+  to those files only; it is not extended to the surrounding code.
 
-Numerical experiments and benchmarks behind the algorithmic claims.
-
-- **Sympy derivations**
-  - `clothoid_derivation.py` — closed-form `θ₀ = atan2(C_y,C_x) − atan2(B,A)`
-    when `(P₀,P₁,κ₀,κ₁,L)` are given.
-  - `clothoid_newton_derivation.py` — Newton on the chord-length residual.
-  - `clothoid_halley_derive.py` — sympy-verified f', f'' for the
-    Bertolazzi–Frego residual.
-  - `clothoid_halleyL_derive.py` — sympy-verified f', f'' for the
-    chord-length residual on L.
-
-- **Verifications and benchmarks**
-  - `clothoid_verify.py` — closed-form algorithm vs reference quadrature.
-  - `clothoid_newton_verify.py` — Newton-on-L iteration counts.
-  - `clothoid_halley_benchmark.py` — Halley vs Newton on the Bertolazzi–Frego
-    kernel, 21×21 (φ₀,φ₁) hypercube.
-  - `clothoid_stress.py` — same kernel, 101×101 grid (10 200 samples).
-    Result: Halley caps worst case at 3 iterations vs Newton's 4 (~48% of
-    samples reduce by one iteration).
-  - `clothoid_halleyL_bench.py` — Halley vs Newton on the chord-length-on-L
-    kernel, with the *verified* `f''(L)` formula.
-  - `peer_review_halley.py` — independent review of a third-party Halley
-    implementation; identifies the labelling/derivative defects.
-
-#### Notes on the python work
-
-The Python derivations include the corrected `f''(L)` formula that an earlier
-sketch had wrong by three sign/coupling errors. Both the wrong formula and
-the corrected one are shown side-by-side in `clothoid_halleyL_derive.py` with
-a finite-difference cross-check that rejects the wrong one and accepts the
-correct one.
-
-## Status
-
-Substantive work, single-author, private. Not intended for external
-distribution in its current form — the publication line in the README of the
-worktree describes what would be ready to claim.
-
-## Build environment
-
-- Coq 8.13.1 (February 2021), Coquelicot 3.x, installed at `C:\Coq`.
-- Python 3.13/3.14 with numpy, scipy, sympy.
+Licensing enquiries: <jeroen.bloemscheer@merkator.com>.

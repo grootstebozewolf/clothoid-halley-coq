@@ -1,0 +1,68 @@
+Copyright (c) 2026 Merkator Group.  All rights reserved.
+
+This repository ("the Work") and every file it contains, including source
+code, build configuration, documentation, manuscript text, and figures,
+except for the third-party data files explicitly carved out below, is the
+proprietary intellectual property of Merkator Group and its licensors.
+
+No licence is granted, whether by implication, estoppel, or otherwise, to
+any person to use, copy, modify, merge, publish, distribute, sublicense,
+transmit, or sell the Work or any derivative work, in whole or in part,
+for any purpose, except as expressly permitted below.
+
+The following narrow permissions are granted, on a non-exclusive,
+non-transferable, revocable basis, to any reader:
+
+  1. CLONING AND INSPECTION.  The reader may clone and read the Work for
+     the purpose of evaluating it in connection with the academic paper
+     that this repository accompanies
+     (docs/mathematics/Clothoid_L_Halley_Solver.pdf).
+
+  2. SCHOLARLY CITATION.  The reader may cite the Work in scholarly
+     literature in accordance with normal academic practice, including the
+     reproduction of short identifying excerpts (theorem statements,
+     function signatures, equation labels, figure captions) attributed to
+     this repository.
+
+  3. REPRODUCTION OF PAPER RESULTS.  The reader may execute the Work on
+     the reader's own equipment, unmodified, for the purpose of
+     reproducing the experimental results reported in the accompanying
+     paper, provided that (a) no resulting output is publicly
+     redistributed and (b) no derivative work is created or shared.
+
+Any use beyond the three permissions above -- including commercial use,
+internal production use, incorporation into other software, creation or
+distribution of derivative works, distribution of compiled binaries, or
+training of statistical or machine-learning models -- requires a separate
+written licence from Merkator Group.  Direct licensing enquiries to:
+
+    jeroen.bloemscheer@merkator.com
+
+THIRD-PARTY DATA -- CC BY 4.0 CARVE-OUT
+=======================================
+
+The files
+
+    data/prorail_clothoids.json.gz
+    data/golden_vectors.json
+
+contain or are derived from public-sector railway geometry data published
+by ProRail B.V. (Spoorgeometrie service, layer 11) under the Creative
+Commons Attribution 4.0 International Licence (CC BY 4.0,
+https://creativecommons.org/licenses/by/4.0/).  Those two files, and any
+further file derived solely from the ProRail data, remain governed by
+CC BY 4.0 with attribution to ProRail Spoorgeometrie; see
+data/LICENSE_DATA.txt for the full attribution notice.  The strict licence
+stated above governs the remainder of the repository and is not extended
+to those two files.
+
+NO WARRANTY
+===========
+
+THE WORK IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND FREEDOM FROM
+DEFECTS.  IN NO EVENT SHALL MERKATOR GROUP, THE AUTHORS, OR ANY
+CONTRIBUTOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN
+CONNECTION WITH THE WORK OR THE USE OR OTHER DEALINGS IN THE WORK.
