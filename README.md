@@ -110,12 +110,26 @@ This repository is **public** but **not open source**.
   are covered by a proprietary licence — see [LICENSE](LICENSE) — that
   grants narrow permissions for *reading*, *academic citation*, and
   *unmodified execution to reproduce the paper's results*. All other
-  uses (commercial use, redistribution, derivative works, model
-  training) require a separate written licence from Merkator Group.
+  uses (commercial use, redistribution, derivative works) require a
+  separate written licence from Merkator Group.
 - The two data files `data/prorail_clothoids.json.gz` and
   `data/golden_vectors.json` are derived from ProRail Spoorgeometrie
   and are redistributed under **CC BY 4.0** (see
   [data/LICENSE_DATA.txt](data/LICENSE_DATA.txt)). That licence applies
   to those files only; it is not extended to the surrounding code.
+
+### No AI / ML training
+
+Use of this repository — in whole or in part, in any form, by any
+party, including automated crawlers — to train, fine-tune, retrieval-
+augment, distil, evaluate, benchmark, or otherwise develop any
+artificial-intelligence or machine-learning system, or to assemble any
+dataset for those purposes, is **expressly prohibited**. This is an
+explicit text-and-data-mining reservation within the meaning of
+Article 4(3) of the EU DSM Directive (Directive (EU) 2019/790) and the
+corresponding opt-outs in other jurisdictions. See the **"NO USE FOR
+TRAINING OF AI / MACHINE-LEARNING SYSTEMS"** section of
+[LICENSE](LICENSE) for the full terms, including the explicit
+preservation of access logs as evidence in subsequent proceedings.
 
 Licensing enquiries: <jeroen.bloemscheer@merkator.com>.
