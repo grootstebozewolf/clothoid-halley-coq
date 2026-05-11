@@ -18,7 +18,7 @@
                  + 2 L^2 (R^2 + T^2 - P S2c - Q S2s)
     with R, T, S2c, S2s the first- and second-moment integrals.
 
-    Tested with Coq 8.13.1 + Coquelicot 3.x. *)
+    Tested with Coq 8.13.1 / 8.20.1 + Coquelicot 3.x. *)
 
 Require Import Reals.
 Require Import Coquelicot.Coquelicot.
@@ -679,25 +679,13 @@ Definition fpL (L k0 k1 : R) : R :=
   + 2 * L * L * (Q_int L k0 k1 * R_int L k0 k1
                  - P_int L k0 k1 * T_int L k0 k1).
 
-(** Statement of the second derivative.
+(** The second derivative of the chord-length residual.
 
-    Proof obligation: mechanical composition via is_derive_plus,
-    is_derive_mult, is_derive_minus, is_derive_id, is_derive_const using
-    the four already-verified integral-level derivatives is_derive_P,
-    is_derive_Q, is_derive_R, is_derive_T.
-
-    We Admit this composite because the nested is_derive composition with
-    Coq 8.13.1 + Coquelicot 3.x hits repeated higher-order-unification
-    failures between Coquelicot's generic [plus]/[mult]/[minus] and Coq
-    Reals' [Rplus]/[Rmult]/[Rminus] which require very large explicit
-    type annotations to discharge.  The analytical content (the four
-    integral-level derivatives) is fully proved above; what is admitted
-    here is only the elementary calculus composition.
-
-    A path to closing this Admit cleanly: switch the proof to use Coq's
-    Reals [derivable_pt_lim_*] lemmas via the bridge [is_derive_Reals],
-    which work over Rplus/Rmult directly.  Roughly 200 lines of mostly
-    mechanical proof. *)
+    Proved by [auto_derive] (which produces nine [ex_derive] side
+    conditions and a goal containing [Derive ...] placeholders for the
+    four moment integrals), then rewriting those placeholders via the
+    integral-level derivative lemmas [Derive_P_int], [Derive_Q_int],
+    [is_derive_R], [is_derive_T], and closing by [ring]. *)
 Theorem f_L_second_eq :
   forall (L k0 k1 : R),
     is_derive (fun u => fpL u k0 k1) L
@@ -710,6 +698,7 @@ Theorem f_L_second_eq :
                   + T_int L k0 k1 * T_int L k0 k1
                   - P_int L k0 k1 * S2c_int L k0 k1
                   - Q_int L k0 k1 * S2s_int L k0 k1)).
+Proof.
   intros L k0 k1.
   unfold fpL.
   auto_derive.
@@ -731,4 +720,4 @@ Theorem f_L_second_eq :
     replace (Derive (fun x : R => T_int x k0 k1) L) with (S2c_int L k0 k1)
       by (symmetry; apply is_derive_unique; apply is_derive_T).
     ring.
-Proof. <the above> Qed.
+Qed.
