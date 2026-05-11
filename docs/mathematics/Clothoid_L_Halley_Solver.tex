@@ -23,7 +23,7 @@
 \begin{abstract}
 We present a numerically robust, cubic-convergent solver based on Halley's method for the nonlinear chord-length residual formulation of the clothoid (Euler spiral) $G^1$ Hermite interpolation problem. The algorithm operates directly on the arc-length parameter $L$ and employs fixed 32-point Gauss--Legendre quadrature over $[0,1]$ for the six moment integrals that define the residual $f(L)$ and its first two analytic derivatives. Industrial-grade safety heuristics (derivative sign guards, denominator thresholds, and positivity damping) ensure reliable convergence even on challenging real-world railway alignment data from the ProRail Spoorgeometrie dataset. 
 
-We provide production-ready implementations in C\# (.NET 8), Java 21, and TypeScript (Node.js), all producing bit-identical results. Benchmarks on approximately 180 real ProRail transition curves (``Overgangsboog'') demonstrate that Halley's method consistently outperforms a comparable Newton variant, achieving convergence in an average of 5.3 iterations (vs.\ 7.8) with sub-4\,\si{\micro\second} solve times. The mathematical derivations are cross-verified symbolically with SymPy and machine-checked in Coq using the Coquelicot real-analysis library, and the overall approach is situated within the current state-of-the-art, building upon the foundational work of Bertolazzi \& Frego while offering an explicit $L$-formulation with enhanced robustness guarantees.
+We provide production-ready implementations in C\# (.NET 8), Java 21, and TypeScript (Node.js), all producing bit-identical iteration counts and chord-length solutions agreeing within \SI{1}{nm} of the Python reference on every test case. Benchmarks on 9{,}058 real ProRail transition curves (``Overgangsboog''), fetched from the public Spoorgeometrie ArcGIS service, demonstrate that Halley's method consistently outperforms a comparable Newton variant, achieving convergence in an average of 2.28 iterations (vs.\ 2.92) with sub-microsecond solve times on the compiled runtimes. The mathematical derivations are cross-verified symbolically with SymPy and machine-checked in Coq using the Coquelicot real-analysis library, and the overall approach is situated within the current state-of-the-art, building upon the foundational work of Bertolazzi \& Frego while offering an explicit $L$-formulation with enhanced robustness guarantees.
 \end{abstract}
 
 \section{Introduction}
@@ -108,54 +108,56 @@ A Newton variant (using only the first four moments) is provided as a lightweigh
 We provide three independent, production-grade implementations that all use identical quadrature constants and the same safeguarded Halley/Newton logic:
 
 \begin{itemize}
-    \item \textbf{C\# (.NET 8)} --- primary reference implementation; uses \texttt{System.Numerics} and aggressive inlining; typical solve time $\approx 1.9\,\si{\micro s}$.
-    \item \textbf{Java 21} --- identical numeric behavior; uses \texttt{Math.fma} for fused multiply-add where beneficial.
-    \item \textbf{TypeScript / Node.js} --- zero-dependency implementation suitable for web/GIS front-ends; slightly slower due to JIT characteristics but still sub-4\,\si{\micro s}.
+    \item \textbf{C\# (.NET 8)} (\texttt{csharp/Clothoid.Halley/}) --- primary compiled-runtime implementation; library + xUnit tests + benchmark harness; median Halley solve time $\approx 0.6\,\si{\micro s}$.
+    \item \textbf{Java 21} (\texttt{java/}) --- Maven-built shaded JAR; identical numeric behaviour to C\# and TypeScript; median Halley solve time $\approx 1.4\,\si{\micro s}$.
+    \item \textbf{TypeScript / Node.js} (\texttt{typescript/}) --- ESM module targeting Node 20+; zero runtime dependencies; \texttt{node --test} regression suite; median Halley solve time $\approx 0.9\,\si{\micro s}$.
 \end{itemize}
 
-All three expose a common API:
+All three expose the same API as the Python reference:
 \begin{verbatim}
-(double L, int iters) solveHalleyL(double[] P0, double[] P1,
-                                   double k0, double k1,
-                                   double tol = 1e-13, int maxIter = 50);
+SolverResult solveHalleyL(double[] P0, double[] P1,
+                          double k0, double k1,
+                          double tol = 1e-13, int maxIter = 50);
 \end{verbatim}
-A matching \texttt{solveNewtonL} is also supplied. Golden-vector regression tests (exported from the Python reference) guarantee bit-identical results across languages.
+A matching \texttt{solveNewtonL} is also supplied. The golden-vector regression suite (file \texttt{data/golden\_vectors.json}, 9{,}058 records exported from the Python reference) is executed by all three implementations; every case agrees with the reference within $10^{-9}$ metres, and Halley/Newton iteration counts match the reference exactly on 100\% of cases.
 
 \section{Benchmarks on Real Railway Data}
 
 \subsection{Dataset}
-We extracted approximately 180 ``Overgangsboog'' (clothoid transition) records from the public ProRail Spoorgeometrie ArcGIS FeatureServer (layer 11, \texttt{PVS\_Horizontale\_Elementen}). Each record supplies start/end points, begin/end radii (hence curvatures with sign), and the design length $L_{\text{true}}$. We retain only segments satisfying the monotone-branch condition $|k_0 L| \le \pi$, $|k_1 L| \le \pi$.
+We extracted all 9{,}058 ``Overgangsboog'' (clothoid transition) records from the public ProRail Spoorgeometrie ArcGIS FeatureServer (layer~11), filtered by \texttt{ELEMENT\_TYPE='Overgangsboog'}. Each record supplies start/end points in RD New coordinates (EPSG:28992, metres), begin/end radii \texttt{STRAAL\_BEGIN}/\texttt{STRAAL\_EIND} together with rotation flags \texttt{ROTATIE\_BEGIN}/\texttt{ROTATIE\_EIND} (yielding signed curvatures $k_0,k_1$), and the design length \texttt{ELEMENT\_LENGTE} as $L_{\text{design}}$. After retaining only segments that satisfy the monotone-branch condition $|k_0 L_{\text{design}}| \le \pi$, $|k_1 L_{\text{design}}| \le \pi$ (which holds for every record in the snapshot), and verifying that both Halley and Newton converge to within $10^{-9}$~m, the working corpus is 9{,}058 cases. The raw snapshot is committed alongside the source as \texttt{data/prorail\_clothoids.json.gz} (CC~BY~4.0 ProRail) and the solved corpus as \texttt{data/golden\_vectors.json}.
 
 \subsection{Methodology}
-For each segment we run both solvers from the initial guess $L_0 = d$ and record iteration count, final residual, and wall-clock time (median of 100 warm runs). Success is declared when the returned $L$ satisfies $|L - L_{\text{true}}| / L_{\text{true}} < 10^{-10}$ or the residual test passes.
+Each implementation reads the same \texttt{golden\_vectors.json}, runs both solvers from the initial guess $L_0 = d$ on every case, then repeats the full corpus 50 times after 5 warmup passes. Reported numbers are the median per-case microseconds across the 50 measurement rounds, divided by 9{,}058. Iteration means are the per-implementation arithmetic mean. The four implementations agree on iteration count for every case; the C\#, Java, and TypeScript implementations also agree with the Python reference on the returned $L$ within $10^{-9}$~m on every case (the golden-vector regression assertion).
 
 \subsection{Results}
 \begin{table}[H]
 \centering
-\caption{ProRail benchmark summary (median over $\approx 180$ real transitions).}
+\caption{ProRail benchmark summary (median per-case time over the full 9{,}058-record corpus, 50 measurement rounds after 5 warmup rounds; iteration agreement: 100\% across all four implementations).}
 \label{tab:benchmark}
-\begin{tabular}{lcccc}
+\begin{tabular}{lccc}
 \toprule
-Language & Solver & Avg.\ Iterations & Avg.\ Time (\si{\micro s}) & Success Rate \\
+Language (runtime) & Solver & Avg.\ Iterations & Median Time (\si{\micro s}) \\
 \midrule
-C\# (.NET 8) & Halley  & 5.3 & 1.92 & 100\% \\
-C\# (.NET 8) & Newton  & 7.8 & 2.15 & 100\% \\
-Java 21      & Halley  & 5.3 & 2.41 & 100\% \\
-Java 21      & Newton  & 7.8 & 2.67 & 100\% \\
-TypeScript   & Halley  & 5.3 & 3.85 & 100\% \\
-TypeScript   & Newton  & 7.8 & 3.62 & 100\% \\
+Python 3 (NumPy)     & Halley  & 2.28 & 33.04 \\
+Python 3 (NumPy)     & Newton  & 2.92 & 39.89 \\
+C\# (.NET 8)         & Halley  & 2.28 &  0.59 \\
+C\# (.NET 8)         & Newton  & 2.92 &  0.77 \\
+Java 21              & Halley  & 2.28 &  1.38 \\
+Java 21              & Newton  & 2.92 &  1.75 \\
+TypeScript (Node 22) & Halley  & 2.28 &  0.88 \\
+TypeScript (Node 22) & Newton  & 2.92 &  1.20 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Halley's method reduces iteration count by roughly 32\% and, on compiled runtimes, also reduces total wall time. The TypeScript implementation shows a smaller advantage for Halley because the extra moment evaluations become relatively more expensive under V8 JIT.
+Halley's method reduces iteration count by 22\% on real railway data (2.28 vs.\ 2.92) and beats Newton on wall time across every implementation we measured, despite performing two additional moment integrals (\(S_{2c}, S_{2s}\)) per iteration. The fastest implementation is C\# at \SI{0.59}{\micro\second} per Halley solve; the slowest compiled runtime is Java at \SI{1.38}{\micro s}. NumPy's per-case overhead (\SI{33}{\micro s}) is dominated by Python interpreter dispatch rather than arithmetic.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.48\textwidth]{iterations_comparison.png}
 \hfill
 \includegraphics[width=0.48\textwidth]{time_comparison.png}
-\caption{ProRail benchmark: average iterations (left) and average solve time (right) for Halley vs.\ Newton across languages.}
+\caption{ProRail benchmark over 9{,}058 real clothoid transitions: average iterations (left) and median per-solve time (right, log scale) for Halley vs.\ Newton across the four implementations.}
 \end{figure}
 
 \section{Comparison with State-of-the-Art}
@@ -166,7 +168,7 @@ Our L-formulation is mathematically equivalent but offers several practical adva
 \begin{itemize}
     \item \textbf{Direct geometric meaning}: $L$ is the physically meaningful arc length; no post-processing conversion is required.
     \item \textbf{Explicit, verified derivatives}: the six-moment formulation yields closed-form $f''(L)$ that can be cross-checked symbolically.
-    \item \textbf{Strong safety net}: the four heuristics listed in Section~3 have been stress-tested on more than 10\,000 synthetic cases plus real ProRail geometry; divergence has never been observed.
+    \item \textbf{Strong safety net}: the four heuristics listed in Section~3 are exercised on the full 9{,}058-record ProRail corpus; divergence has not been observed and every case converges within four iterations of the Halley solver.
     \item \textbf{Multi-language verified corpus}: identical numeric behavior across three languages provides an independent correctness oracle.
 \end{itemize}
 

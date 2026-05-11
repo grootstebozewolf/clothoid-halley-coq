@@ -1,0 +1,56 @@
+{
+  "generated": "2026-05-11T18:45:43Z",
+  "platform": "win32",
+  "corpus_source": "data/golden_vectors.json (real ProRail Spoorgeometrie clothoids)",
+  "corpus_size": 9058,
+  "results": [
+    {
+      "language": "Python 3 (NumPy)",
+      "runtime": "3.14.4",
+      "cases": 9058,
+      "halley_us": 33.039688673074494,
+      "newton_us": 39.888595716472466,
+      "halley_us_min": 32.28607860477978,
+      "newton_us_min": 38.32446456160858,
+      "halley_iter_mean": 2.276771914329874,
+      "newton_iter_mean": 2.9174210642525944,
+      "wall_s": 39.21734833717346
+    },
+    {
+      "language": "C# (.NET 8)",
+      "runtime": "8.0.26",
+      "cases": 9058,
+      "halley_us": 0.5910576286155883,
+      "newton_us": 0.7718370501214397,
+      "halley_us_min": 0.5468094502097594,
+      "newton_us_min": 0.693077942150585,
+      "halley_iter_mean": 2.276771914329874,
+      "newton_iter_mean": 2.9176418635460366,
+      "wall_s": 3.5824806690216064
+    },
+    {
+      "language": "Java 21",
+      "runtime": "21.0.11",
+      "cases": 9058,
+      "halley_us": 1.3848090086111724,
+      "newton_us": 1.7527158313093396,
+      "halley_us_min": 1.3340803709428128,
+      "newton_us_min": 1.706734378449989,
+      "halley_iter_mean": 2.276771914329874,
+      "newton_iter_mean": 2.9176418635460366,
+      "wall_s": 2.039295196533203
+    },
+    {
+      "language": "TypeScript (Node.js)",
+      "runtime": "v22.13.1",
+      "cases": 9058,
+      "halley_us": 0.8801943033782292,
+      "newton_us": 1.1981011260763965,
+      "halley_us_min": 0.8095937293000662,
+      "newton_us_min": 1.1202804151026717,
+      "halley_iter_mean": 2.276771914329874,
+      "newton_iter_mean": 2.9176418635460366,
+      "wall_s": 2.9672069549560547
+    }
+  ]
+}

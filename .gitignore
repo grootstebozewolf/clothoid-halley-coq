@@ -24,6 +24,18 @@ venv/
 *.fls
 *.fdb_latexmk
 
+# .NET
+[Bb]in/
+[Oo]bj/
+
+# Java / Maven
+target/
+
+# Node / TypeScript
+node_modules/
+dist/
+package-lock.json
+
 # OS
 .DS_Store
 Thumbs.db

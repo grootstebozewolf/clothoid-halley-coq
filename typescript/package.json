@@ -1,0 +1,19 @@
+{
+  "name": "clothoid-halley",
+  "version": "1.0.0",
+  "description": "Halley solver for the chord-length clothoid residual (Node 20+ / TypeScript reference impl).",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test":  "tsc && node --test dist/test/golden.test.js",
+    "bench": "tsc && node dist/src/bench.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "@types/node": "^22.7.4"
+  }
+}
