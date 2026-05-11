@@ -62,6 +62,9 @@ abstract: >-
 
 identifiers:
   - type: doi
+    value: 10.5281/zenodo.20128415
+    description: "Zenodo concept DOI (always resolves to the latest version)"
+  - type: doi
     value: 10.5281/zenodo.20128416
     description: "Zenodo DOI for clothoid-halley-coq v1.0.0"
 
@@ -79,6 +82,9 @@ preferred-citation:
   url:          "https://github.com/grootstebozewolf/clothoid-halley-coq"
   doi:          "10.5281/zenodo.20128416"
   identifiers:
+    - type: doi
+      value: 10.5281/zenodo.20128415
+      description: "Zenodo concept DOI"
     - type: doi
       value: 10.5281/zenodo.20128416
       description: "Zenodo DOI for v1.0.0"
