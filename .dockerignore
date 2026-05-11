@@ -1,0 +1,7 @@
+# The Dockerfile installs toolchain only. No project files are COPYed
+# into the image -- the repository is mounted as a volume at runtime
+# (-v $PWD:/workspace). So we exclude everything from the build
+# context to keep `podman build .` fast on slow networks.
+*
+!Dockerfile
+!.dockerignore
