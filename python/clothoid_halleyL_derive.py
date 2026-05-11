@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Merkator Group
+# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
 """
 Symbolic derivation of f, f', f'' for the chord-length residual
 

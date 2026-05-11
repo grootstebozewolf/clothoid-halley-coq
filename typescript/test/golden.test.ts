@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Merkator Group
+// SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
+
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";

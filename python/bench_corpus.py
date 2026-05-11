@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Merkator Group
+# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
 """
 Run the Halley / Newton Python solvers over the full golden-vector
 corpus and emit the same JSON shape as the C# / Java / TypeScript

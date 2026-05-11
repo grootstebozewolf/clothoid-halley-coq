@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Merkator Group
+# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
 """
 Improvement over Bertolazzi-Frego (2015) "G1 fitting with clothoids".
 

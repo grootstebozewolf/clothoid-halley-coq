@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Merkator Group
+# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
 """
 Newton's method on the length L for the clothoid connecting P0->P1 with
 prescribed (kappa_0, kappa_1).

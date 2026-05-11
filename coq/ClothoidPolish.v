@@ -1,3 +1,6 @@
+(* SPDX-FileCopyrightText: 2026 Merkator Group *)
+(* SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining *)
+
 (** Moment-notation polishing for the Bertolazzi-Frego residual.
 
     Adds the named definitions f, X, Y to match the paper's notation, and

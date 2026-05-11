@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Merkator Group
+// SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
+
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;

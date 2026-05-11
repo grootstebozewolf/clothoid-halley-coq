@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Merkator Group
+// SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
+
 package com.grootstebozewolf.clothoid;
 
 /**

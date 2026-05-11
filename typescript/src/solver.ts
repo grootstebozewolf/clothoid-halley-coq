@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Merkator Group
+// SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
+
 /**
  * Halley's / Newton's method for the clothoid chord-length residual
  *

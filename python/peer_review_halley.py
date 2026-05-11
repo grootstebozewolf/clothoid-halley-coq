@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Merkator Group
+# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
 """Peer review of the submitted fit_clothoid_halley solver."""
 import math
 import numpy as np

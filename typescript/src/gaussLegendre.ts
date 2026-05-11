@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Merkator Group
+// SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
+
 /**
  * 32-point Gauss-Legendre quadrature nodes and weights on [0, 1].
  * Bit-identical to numpy.polynomial.legendre.leggauss(32) after the

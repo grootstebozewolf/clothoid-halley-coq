@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Merkator Group
+// SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
+
 import { readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import * as path from "node:path";

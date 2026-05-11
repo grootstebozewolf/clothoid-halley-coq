@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Merkator Group
+// SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
 {
   "compilerOptions": {
     "target":           "ES2022",

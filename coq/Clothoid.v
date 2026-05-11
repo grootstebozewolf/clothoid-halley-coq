@@ -1,3 +1,6 @@
+(* SPDX-FileCopyrightText: 2026 Merkator Group *)
+(* SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining *)
+
 (** Formal derivative identities for the Bertolazzi-Frego (2015)
     clothoid G1 Hermite residual.
 

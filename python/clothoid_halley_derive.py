@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Merkator Group
+# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
 """Derive f, f', f'' symbolically for the Bertolazzi-Frego g(A) equation."""
 import sympy as sp
 

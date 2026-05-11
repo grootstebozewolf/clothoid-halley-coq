@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Merkator Group
+# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
 """
 Drive the four language benchmarks (Python / C# / Java / TypeScript)
 sequentially, collect their JSON output, and write a unified

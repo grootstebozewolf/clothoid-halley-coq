@@ -1,3 +1,6 @@
+(* SPDX-FileCopyrightText: 2026 Merkator Group *)
+(* SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining *)
+
 (** Formal derivative identities for the chord-length clothoid residual.
 
     Given fixed (P0, P1, kappa_0, kappa_1) with d = |P1 - P0|, the

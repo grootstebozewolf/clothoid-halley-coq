@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Merkator Group
+# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
 """
 Build the golden-vector test suite that every implementation
 (Python / C# / Java / TypeScript) must reproduce numerically.

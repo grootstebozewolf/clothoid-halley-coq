@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Merkator Group
+# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
 """Derive f(L) and f'(L) for Newton iteration on the unknown length L."""
 import sympy as sp
 
