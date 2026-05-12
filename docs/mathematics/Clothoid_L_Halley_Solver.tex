@@ -21,9 +21,9 @@
 \maketitle
 
 \begin{abstract}
-Clothoid (Euler-spiral) transitions are the geometric primitive that links straight track to circular arcs in railway alignment design, modern highway geometry, and the curve-continuous representations used by computer-aided design and geographic-information pipelines; the ability to recover the arc-length parameter from endpoint and curvature data is a routine operation in those pipelines. We present a numerically robust, cubic-convergent solver based on Halley's method for the nonlinear chord-length residual formulation of the clothoid (Euler spiral) $G^1$ Hermite interpolation problem. The algorithm operates directly on the arc-length parameter $L$ and employs fixed 32-point Gauss--Legendre quadrature over $[0,1]$ for the six moment integrals that define the residual $f(L)$ and its first two analytic derivatives. Industrial-grade safety heuristics (derivative sign guards, denominator thresholds, and positivity damping) ensure reliable convergence even on challenging real-world railway alignment data from the ProRail Spoorgeometrie dataset. 
+Clothoid (Euler-spiral) transitions are the geometric primitive that links straight track to circular arcs in railway alignment design, modern highway geometry, and the curve-continuous representations used by computer-aided design and geographic-information pipelines; the ability to recover the arc-length parameter from endpoint and curvature data is a routine operation in those pipelines. This paper presents a numerically robust, cubic-convergent solver based on Halley's method for the nonlinear chord-length residual formulation of the clothoid (Euler spiral) $G^1$ Hermite interpolation problem. The algorithm operates directly on the arc-length parameter $L$ and employs fixed 32-point Gauss--Legendre quadrature over $[0,1]$ for the six moment integrals that define the residual $f(L)$ and its first two analytic derivatives. Industrial-grade safety heuristics (derivative sign guards, denominator thresholds, and positivity damping) ensure reliable convergence even on challenging real-world railway alignment data from the ProRail Spoorgeometrie dataset. 
 
-We provide production-ready implementations in C\# (.NET 8), Java 21, and TypeScript (Node.js), all producing bit-identical iteration counts and chord-length solutions agreeing within \SI{1}{nm} of the Python reference on every test case. Benchmarks on 9{,}058 real ProRail transition curves (``Overgangsboog''), fetched from the public Spoorgeometrie ArcGIS service, demonstrate that Halley's method consistently outperforms a comparable Newton variant, achieving convergence in an average of 2.28 iterations (vs.\ 2.92) with sub-microsecond solve times on the compiled runtimes. The mathematical derivations are cross-verified symbolically with SymPy and machine-checked in Coq using the Coquelicot real-analysis library, and the overall approach is situated within the current state-of-the-art, building upon the foundational work of Bertolazzi \& Frego while offering an explicit $L$-formulation with enhanced robustness guarantees.
+Production-ready implementations are provided in C\# (.NET 8), Java 21, and TypeScript (Node.js), all producing bit-identical iteration counts and chord-length solutions agreeing within \SI{1}{nm} of the Python reference on every test case. Benchmarks on 9{,}058 real ProRail transition curves (``Overgangsboog''), fetched from the public Spoorgeometrie ArcGIS service, demonstrate that Halley's method consistently outperforms a comparable Newton variant, achieving convergence in an average of 2.28 iterations (vs.\ 2.92) with sub-microsecond solve times on the compiled runtimes. The mathematical derivations are cross-verified symbolically with SymPy and machine-checked in Coq using the Coquelicot real-analysis library, and the overall approach is situated within the current state-of-the-art, building upon the foundational work of Bertolazzi \& Frego while offering an explicit $L$-formulation with enhanced robustness guarantees.
 \end{abstract}
 
 \section{Introduction}
@@ -31,13 +31,13 @@ Clothoids (also known as Euler spirals or Cornu spirals) are curves whose curvat
 
 The $G^1$ Hermite interpolation problem with a single clothoid consists of finding parameters $L > 0$, $\kappa_0$, and $\kappa_1$ (or equivalently the curvature rate) such that the clothoid segment starts at point $P_0$ with tangent angle $\theta_0$ and curvature $\kappa_0$, and ends at $P_1$ with tangent angle $\theta_1$ and curvature $\kappa_1$. In many practical settings---particularly when the endpoints and curvatures are known from design data or surveyed geometry---it is natural to solve directly for the arc length $L$.
 
-This paper focuses on the \emph{chord-length residual formulation} (L-formulation). We reduce the problem to a scalar nonlinear equation $f(L) = 0$ whose root is the desired arc length. We then apply Halley's method, a cubic-convergent root-finding algorithm, augmented with carefully engineered safety heuristics that guarantee practical robustness.
+This paper focuses on the \emph{chord-length residual formulation} (L-formulation). The problem is reduced to a scalar nonlinear equation $f(L) = 0$ whose root is the desired arc length. Halley's method, a cubic-convergent root-finding algorithm, is then applied, augmented with carefully engineered safety heuristics that guarantee practical robustness.
 
-Our contributions are:
+The contributions of this paper are:
 \begin{itemize}
     \item A complete, derivative-exact derivation of $f(L)$, $f'(L)$, and $f''(L)$ using six Gauss--Legendre moments.
     \item A production-grade Halley solver with explicit safeguards (sign checks, denominator guards, and damped updates).
-    \item Cross-language implementations (C\#, Java, TypeScript) with identical numerical behavior.
+    \item Cross-language implementations (C\#, Java, TypeScript) with identical numerical behaviour.
     \item Rigorous benchmarking on real ProRail railway transition data.
     \item Open academic documentation with full mathematical detail and SOTA comparison.
 \end{itemize}
@@ -61,7 +61,7 @@ y(s) = y_0 + \int_0^s \sin\theta(u)\, du.
 
 \subsection{The Chord-Length Residual (L-Formulation)}
 \label{sec:residual}
-Given $P_0$, $P_1$, $\kappa_0$, and $\kappa_1$, we seek $L > 0$ such that the chord length of the clothoid equals the Euclidean distance $d = \|P_1 - P_0\|$. Normalizing the parameter to $\tau = s/L \in [0,1]$ yields the auxiliary function
+Given $P_0$, $P_1$, $\kappa_0$, and $\kappa_1$, the goal is to find $L > 0$ such that the chord length of the clothoid equals the Euclidean distance $d = \|P_1 - P_0\|$. Normalising the parameter to $\tau = s/L \in [0,1]$ yields the auxiliary function
 \[
 \psi(\tau) = \kappa_0 \tau + \frac{\kappa_1 - \kappa_0}{2} \tau^2.
 \]
@@ -86,7 +86,7 @@ f''(L) &= 2r^2 + 8L(QR - PT) + 2L^2(R^2 + T^2 - P S_{2c} - Q S_{2s}). \label{eq:
 All four integral-level derivatives of the moments ($P' = -T$, $Q' = R$, $R' = -S_{2s}$, $T' = S_{2c}$) follow directly from differentiation under the integral sign. These identities, together with the residual derivatives in equations~\eqref{eq:deriv1} and~\eqref{eq:deriv2}, have been cross-verified symbolically with SymPy and machine-checked in Coq using the Coquelicot real-analysis library; see Section~\ref{sec:verification}.
 
 \paragraph{Monotone-branch assumption.}
-Throughout this paper we restrict attention to the \emph{monotone branch} of the residual, characterised by
+Throughout this paper attention is restricted to the \emph{monotone branch} of the residual, characterised by
 \[
     |k_0 L| \le \pi, \qquad |k_1 L| \le \pi.
 \]
@@ -109,10 +109,10 @@ Halley's method is the order-two member of the Householder family of root-findin
     \item $f$ is well scaled near the root because the leading $L^2 r^2$ term keeps $|f'|$ bounded away from zero on the monotone branch defined in Section~\ref{sec:residual};
     \item the explicit second derivative stabilises overshoot in exactly the regime where Newton's tangent step would aim past the root.
 \end{itemize}
-Because the integrals required for $f''$ share their Gauss--Legendre cache with the integrals for $f$ and $f'$, Halley's per-iteration cost is dominated by two additional dot products rather than additional quadrature passes, and the iteration-count saving (Section~\ref{sec:bench}) translates directly into wall-time saving on every compiled runtime we measured.
+Because the integrals required for $f''$ share their Gauss--Legendre cache with the integrals for $f$ and $f'$, Halley's per-iteration cost is dominated by two additional dot products rather than additional quadrature passes, and the iteration-count saving (Section~\ref{sec:bench}) translates directly into wall-time saving on every compiled runtime measured in Section~\ref{sec:bench}.
 
 \subsection{Safety Heuristics (Production Robustness)}
-Pure Halley iteration can diverge or produce non-physical (negative) steps on difficult instances. We therefore embed the following safeguards, which have proven essential on real railway data:
+Pure Halley iteration can diverge or produce non-physical (negative) steps on difficult instances. The following safeguards are therefore embedded in the implementation; they have proven essential on real railway data:
 \begin{enumerate}
     \item \textbf{Convergence test}: if $|f(L)| < \varepsilon \cdot \max(d^2, 1)$ with $\varepsilon = 10^{-13}$, return.
     \item \textbf{Derivative sign guard}: if $f' \le 0$, inflate $L \leftarrow 1.5 L$ and continue.
@@ -123,7 +123,7 @@ A Newton variant (using only the first four moments) is provided as a lightweigh
 
 \section{Implementations}
 
-We provide three independent, production-grade implementations that all use identical quadrature constants and the same safeguarded Halley/Newton logic:
+Three independent, production-grade implementations are provided, all using identical quadrature constants and the same safeguarded Halley/Newton logic:
 
 \begin{itemize}
     \item \textbf{C\# (.NET 8)} (\texttt{csharp/Clothoid.Halley/}) --- primary compiled-runtime implementation; library + xUnit tests + benchmark harness; median Halley solve time $\approx 0.6\,\si{\micro s}$.
@@ -143,7 +143,7 @@ A matching \texttt{solveNewtonL} is also supplied. The golden-vector regression 
 \label{sec:bench}
 
 \subsection{Dataset}
-We extracted all 9{,}058 ``Overgangsboog'' (clothoid transition) records from the public ProRail Spoorgeometrie ArcGIS FeatureServer (layer~11), filtered by \texttt{ELEMENT\_TYPE='Overgangsboog'}. Each record supplies start/end points in RD New coordinates (EPSG:28992, metres), begin/end radii \texttt{STRAAL\_BEGIN}/\texttt{STRAAL\_EIND} together with rotation flags \texttt{ROTATIE\_BEGIN}/\texttt{ROTATIE\_EIND} (yielding signed curvatures $k_0,k_1$), and the design length \texttt{ELEMENT\_LENGTE} as $L_{\text{design}}$. After retaining only segments that satisfy the monotone-branch condition $|k_0 L_{\text{design}}| \le \pi$, $|k_1 L_{\text{design}}| \le \pi$ (which holds for every record in the snapshot), and verifying that both Halley and Newton converge to within $10^{-9}$~m, the working corpus is 9{,}058 cases. The raw snapshot is committed alongside the source as \texttt{data/prorail\_clothoids.json.gz} (CC~BY~4.0 ProRail) and the solved corpus as \texttt{data/golden\_vectors.json}.
+All 9{,}058 ``Overgangsboog'' (clothoid transition) records were extracted from the public ProRail Spoorgeometrie ArcGIS FeatureServer (layer~11), filtered by \texttt{ELEMENT\_TYPE='Overgangsboog'}. Each record supplies start/end points in RD New coordinates (EPSG:28992, metres), begin/end radii \texttt{STRAAL\_BEGIN}/\texttt{STRAAL\_EIND} together with rotation flags \texttt{ROTATIE\_BEGIN}/\texttt{ROTATIE\_EIND} (yielding signed curvatures $k_0,k_1$), and the design length \texttt{ELEMENT\_LENGTE} as $L_{\text{design}}$. After retaining only segments that satisfy the monotone-branch condition $|k_0 L_{\text{design}}| \le \pi$, $|k_1 L_{\text{design}}| \le \pi$ (which holds for every record in the snapshot), and verifying that both Halley and Newton converge to within $10^{-9}$~m, the working corpus is 9{,}058 cases. The raw snapshot is committed alongside the source as \texttt{data/prorail\_clothoids.json.gz} (CC~BY~4.0 ProRail) and the solved corpus as \texttt{data/golden\_vectors.json}.
 
 \subsection{Methodology}
 Each implementation reads the same \texttt{golden\_vectors.json}, runs both solvers from the initial guess $L_0 = d$ on every case, then repeats the full corpus 50 times after 5 warmup passes. Reported numbers are the median per-case microseconds across the 50 measurement rounds, divided by 9{,}058. Iteration means are the per-implementation arithmetic mean. The four implementations agree on iteration count for every case; the C\#, Java, and TypeScript implementations also agree with the Python reference on the returned $L$ within $10^{-9}$~m on every case (the golden-vector regression assertion).
@@ -169,7 +169,7 @@ TypeScript (Node 22) & Newton  & 2.92 &  1.20 \\
 \end{tabular}
 \end{table}
 
-Halley's method reduces iteration count by 22\% on real railway data (2.28 vs.\ 2.92) and beats Newton on wall time across every implementation we measured, despite performing two additional moment integrals (\(S_{2c}, S_{2s}\)) per iteration. The fastest implementation is C\# at \SI{0.59}{\micro\second} per Halley solve; the slowest compiled runtime is Java at \SI{1.38}{\micro s}. NumPy's per-case overhead (\SI{33}{\micro s}) is dominated by Python interpreter dispatch rather than arithmetic.
+Halley's method reduces iteration count by 22\% on real railway data (2.28 vs.\ 2.92) and beats Newton on wall time across every implementation measured, despite performing two additional moment integrals (\(S_{2c}, S_{2s}\)) per iteration. The fastest implementation is C\# at \SI{0.59}{\micro\second} per Halley solve; the slowest compiled runtime is Java at \SI{1.38}{\micro s}. NumPy's per-case overhead (\SI{33}{\micro s}) is dominated by Python interpreter dispatch rather than arithmetic.
 
 \begin{figure}[H]
 \centering
@@ -183,12 +183,12 @@ Halley's method reduces iteration count by 22\% on real railway data (2.28 vs.\ 
 
 The seminal work of \citet{Bertolazzi2015} --- and the curvature-continuous $G^2$ extension of \citet{Bertolazzi2018} --- remains the reference implementation for clothoid Hermite fitting. Their approach reduces the problem to a single nonlinear equation in a transformed parameter (commonly $A$ or a curvature-related quantity) and solves it with Newton--Raphson, employing the asymptotic expansions worked out in \citep{Bertolazzi2013arxiv} for the initial guess. An alternative numerical strategy, integrating the clothoid as an initial-value problem with Runge--Kutta-style schemes, is given by \citet{VazquezMendez2015}; this approach is attractive when the moments are not directly required but does not yield the explicit second-derivative form on which Halley's method depends.
 
-Our L-formulation is mathematically equivalent but offers several practical advantages:
+The L-formulation presented here is mathematically equivalent but offers several practical advantages:
 \begin{itemize}
     \item \textbf{Direct geometric meaning}: $L$ is the physically meaningful arc length; no post-processing conversion is required.
     \item \textbf{Explicit, verified derivatives}: the six-moment formulation yields closed-form $f''(L)$ that can be cross-checked symbolically.
     \item \textbf{Strong safety net}: the four heuristics listed in Section~3 are exercised on the full 9{,}058-record ProRail corpus; divergence has not been observed and every case converges within four iterations of the Halley solver.
-    \item \textbf{Multi-language verified corpus}: identical numeric behavior across three languages provides an independent correctness oracle.
+    \item \textbf{Multi-language verified corpus}: identical numeric behaviour across three languages provides an independent correctness oracle.
 \end{itemize}
 
 No fundamentally superior solver (e.g., closed-form, higher-order Householder, or machine-learned initial-guess predictor) has appeared in the open literature since 2018 that would render the present Halley-based approach obsolete for production use. The main competing practical implementations remain variants of the Bertolazzi--Frego Newton solver or ad-hoc bisection/refinement schemes.
@@ -198,7 +198,7 @@ The Bertolazzi--Frego $A$-formulation should still be preferred in two regimes: 
 \section{Formal Verification}
 \label{sec:verification}
 
-The analytical foundation of the solver---the four primitive integral derivatives and the residual derivatives in equations~\eqref{eq:deriv1} and~\eqref{eq:deriv2}---has been formalized and machine-checked in Coq using the Coquelicot real-analysis library~\citep{Boldo2015}. The development is approximately 720 lines of Coq and contains no \texttt{Admitted} or \texttt{Axiom} declarations; it has been verified to compile cleanly under Coq 8.13.1 and Coq 8.20.1 with Coquelicot~3.x.
+The analytical foundation of the solver---the four primitive integral derivatives and the residual derivatives in equations~\eqref{eq:deriv1} and~\eqref{eq:deriv2}---has been formalised and machine-checked in Coq using the Coquelicot real-analysis library~\citep{Boldo2015}. The development is approximately 720 lines of Coq and contains no \texttt{Admitted} or \texttt{Axiom} declarations; it has been verified to compile cleanly under Coq 8.13.1 and Coq 8.20.1 with Coquelicot~3.x.
 
 The four primitive identities $P'(L) = -T(L)$, $Q'(L) = R(L)$, $R'(L) = -S_{2s}(L)$, $T'(L) = S_{2c}(L)$ are proved via differentiation under the integral sign, invoking Coquelicot's \texttt{is\_derive\_RInt\_param\_aux} lemma. This requires four hypotheses for each integral: pointwise differentiability of the integrand with respect to~$L$, joint continuity of the parameter-derivative integrand in~$(L,\tau)$, local integrability of the original integrand in a neighbourhood of the evaluation point, and integrability of the parameter-derivative integrand at the evaluation point. Each hypothesis is discharged by elementary continuity and integrability lemmas for compositions of polynomials with sine and cosine.
 
@@ -253,13 +253,13 @@ Qed.
 \section{Conclusion and Future Work}
 \label{sec:conclusion}
 
-We have delivered a robust, well-documented, and multi-language Halley solver for the clothoid chord-length problem together with a complete academic reference. The implementation is already being integrated into the \texttt{allure-wkt} toolchain and a forthcoming PostgreSQL extension that will expose native \texttt{CLOTHOID} WKT support with on-the-fly $L$ solving.
+This paper has delivered a robust, well-documented, and multi-language Halley solver for the clothoid chord-length problem together with a complete academic reference. The implementation is already being integrated into the \texttt{allure-wkt} toolchain and a forthcoming PostgreSQL extension that will expose native \texttt{CLOTHOID} WKT support with on-the-fly $L$ solving.
 
 Planned extensions include:
 \begin{itemize}
     \item A native C/PostgreSQL extension with the same safeguarded Halley core.
-    \item Vectorized batch solving for high-throughput map-matching pipelines.
-    \item Automatic differentiation / dual-number versions for gradient-based route optimization.
+    \item Vectorised batch solving for high-throughput map-matching pipelines.
+    \item Automatic differentiation / dual-number versions for gradient-based route optimisation.
 \end{itemize}
 
 The full source, benchmarks, and this paper are maintained at \url{https://github.com/grootstebozewolf/clothoid-halley-coq} and archived at \url{https://doi.org/10.5281/zenodo.20128416} (Zenodo, v1.0.0).
