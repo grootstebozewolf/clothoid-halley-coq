@@ -64,7 +64,7 @@ abstract: >-
 # rejects CITATION.cff that references sibling Zenodo DOIs as
 # additional identifiers of the work being deposited):
 #   v1.0.0  10.5281/zenodo.20128416
-#   v1.0.1  10.5281/zenodo.XXXXXXX  (TBD, minted upon GitHub Release)
+#   v1.0.1  10.5281/zenodo.20130656
 
 identifiers:
   - type: doi
