@@ -62,10 +62,9 @@ def main() -> None:
                  fontsize=13, fontweight="bold")
     ax.set_xticks(x)
     ax.set_xticklabels(languages, fontsize=10)
-    ax.legend()
-    ax.set_ylim(0, max(max(halley_us), max(newton_us)) * 1.4)
-    ax.set_yscale("log")  # 50x dynamic range Python..C#
-    ax.grid(axis="y", which="both", alpha=0.3)
+    ax.legend(loc="upper right")
+    ax.set_ylim(0, max(max(halley_us), max(newton_us)) * 1.18)
+    ax.grid(axis="y", alpha=0.3)
     _annotate(ax, bars1, "{:.2f}")
     _annotate(ax, bars2, "{:.2f}")
     plt.tight_layout()
