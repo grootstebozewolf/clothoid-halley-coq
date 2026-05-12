@@ -137,7 +137,7 @@ SolverResult solveHalleyL(double[] P0, double[] P1,
                           double k0, double k1,
                           double tol = 1e-13, int maxIter = 50);
 \end{verbatim}
-A matching \texttt{solveNewtonL} is also supplied. The golden-vector regression suite (file \texttt{data/golden\_vectors.json}, 9{,}058 records exported from the Python reference) is executed by all three implementations; every case agrees with the reference within $10^{-9}$ metres, and Halley/Newton iteration counts match the reference exactly on 100\% of cases.
+A matching \texttt{solveNewtonL} is also supplied. The golden-vector regression suite (file \texttt{data/\allowbreak golden\_\allowbreak vectors.json}, 9{,}058 records exported from the Python reference) is executed by all three implementations; every case agrees with the reference within $10^{-9}$ metres, and Halley/Newton iteration counts match the reference exactly on 100\% of cases.
 
 \section{Benchmarks on Real Railway Data}
 \label{sec:bench}
