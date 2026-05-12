@@ -64,11 +64,12 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.20128415
     description: "Zenodo concept DOI (always resolves to the latest version)"
-  - type: doi
-    value: 10.5281/zenodo.20128416
-    description: "Zenodo DOI for clothoid-halley-coq v1.0.0 (historical first release)"
-  # The Zenodo DOI for v1.0.1 will be minted automatically once the v1.0.1
-  # GitHub Release is published, and should be added here as a third entry.
+  # Historical version-specific DOIs (informational, do not list here as
+  # additional `identifiers:` entries -- Zenodo's intake validator
+  # rejects CITATION.cff that references sibling Zenodo DOIs as
+  # identifiers of the work being deposited):
+  #   v1.0.0  10.5281/zenodo.20128416
+  #   v1.0.1  10.5281/zenodo.XXXXXXX  (TBD, minted upon GitHub Release)
 
 preferred-citation:
   type: software
@@ -86,7 +87,4 @@ preferred-citation:
   identifiers:
     - type: doi
       value: 10.5281/zenodo.20128415
-      description: "Zenodo concept DOI (resolves to latest, currently v1.0.1)"
-    - type: doi
-      value: 10.5281/zenodo.20128416
-      description: "Zenodo DOI for v1.0.0 (historical)"
+      description: "Zenodo concept DOI (resolves to latest)"
