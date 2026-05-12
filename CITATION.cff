@@ -23,8 +23,8 @@ authors:
 repository-code: "https://github.com/grootstebozewolf/clothoid-halley-coq"
 url:             "https://github.com/grootstebozewolf/clothoid-halley-coq"
 
-version:         "1.0.0"
-date-released:    2026-05-11
+version:         "1.0.1"
+date-released:    2026-05-12
 
 license:        "LicenseRef-Merkator-Proprietary-NoAITraining"
 license-url:    "https://github.com/grootstebozewolf/clothoid-halley-coq/blob/main/LICENSE"
@@ -66,7 +66,9 @@ identifiers:
     description: "Zenodo concept DOI (always resolves to the latest version)"
   - type: doi
     value: 10.5281/zenodo.20128416
-    description: "Zenodo DOI for clothoid-halley-coq v1.0.0"
+    description: "Zenodo DOI for clothoid-halley-coq v1.0.0 (historical first release)"
+  # The Zenodo DOI for v1.0.1 will be minted automatically once the v1.0.1
+  # GitHub Release is published, and should be added here as a third entry.
 
 preferred-citation:
   type: software
@@ -76,15 +78,15 @@ preferred-citation:
       family-names: Bloemscheer
       affiliation: "Merkator Group"
       email: jeroen.bloemscheer@merkator.com
-  version:      "1.0.0"
+  version:      "1.0.1"
   year:         2026
-  date-released: 2026-05-11
+  date-released: 2026-05-12
   url:          "https://github.com/grootstebozewolf/clothoid-halley-coq"
-  doi:          "10.5281/zenodo.20128416"
+  doi:          "10.5281/zenodo.20128415"
   identifiers:
     - type: doi
       value: 10.5281/zenodo.20128415
-      description: "Zenodo concept DOI"
+      description: "Zenodo concept DOI (resolves to latest, currently v1.0.1)"
     - type: doi
       value: 10.5281/zenodo.20128416
-      description: "Zenodo DOI for v1.0.0"
+      description: "Zenodo DOI for v1.0.0 (historical)"
