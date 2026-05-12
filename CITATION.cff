@@ -26,7 +26,6 @@ url:             "https://github.com/grootstebozewolf/clothoid-halley-coq"
 version:         "1.0.1"
 date-released:    2026-05-12
 
-license:        "LicenseRef-Merkator-Proprietary-NoAITraining"
 license-url:    "https://github.com/grootstebozewolf/clothoid-halley-coq/blob/main/LICENSE"
 
 keywords:
@@ -60,16 +59,17 @@ abstract: >-
   case of a 9,058-record benchmark corpus drawn from the public
   ProRail Spoorgeometrie railway-geometry dataset.
 
+# Historical version-specific Zenodo DOIs (informational only; do not
+# list them as `identifiers:` entries -- Zenodo's intake validator
+# rejects CITATION.cff that references sibling Zenodo DOIs as
+# additional identifiers of the work being deposited):
+#   v1.0.0  10.5281/zenodo.20128416
+#   v1.0.1  10.5281/zenodo.XXXXXXX  (TBD, minted upon GitHub Release)
+
 identifiers:
   - type: doi
-    value: 10.5281/zenodo.20128415
+    value: "10.5281/zenodo.20128415"
     description: "Zenodo concept DOI (always resolves to the latest version)"
-  # Historical version-specific DOIs (informational, do not list here as
-  # additional `identifiers:` entries -- Zenodo's intake validator
-  # rejects CITATION.cff that references sibling Zenodo DOIs as
-  # identifiers of the work being deposited):
-  #   v1.0.0  10.5281/zenodo.20128416
-  #   v1.0.1  10.5281/zenodo.XXXXXXX  (TBD, minted upon GitHub Release)
 
 preferred-citation:
   type: software
@@ -84,7 +84,3 @@ preferred-citation:
   date-released: 2026-05-12
   url:          "https://github.com/grootstebozewolf/clothoid-halley-coq"
   doi:          "10.5281/zenodo.20128415"
-  identifiers:
-    - type: doi
-      value: 10.5281/zenodo.20128415
-      description: "Zenodo concept DOI (resolves to latest)"
