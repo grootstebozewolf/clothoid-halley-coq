@@ -13,7 +13,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 type: software
-title: "Robust Halley's Method for the Chord-Length Parameter L in Clothoid G^1 Hermite Interpolation"
+title: "A Verified-Azimuth, Zero-Friction Halley Solver for the Chord-Length Parameter L in Clothoid G^1 Hermite Interpolation"
 authors:
   - given-names: Jeroen
     family-names: Bloemscheer
@@ -23,8 +23,8 @@ authors:
 repository-code: "https://github.com/grootstebozewolf/clothoid-halley-coq"
 url:             "https://github.com/grootstebozewolf/clothoid-halley-coq"
 
-version:         "1.0.2"
-date-released:    2026-05-12
+version:         "1.0.3"
+date-released:    2026-05-16
 
 license-url:    "https://github.com/grootstebozewolf/clothoid-halley-coq/blob/main/LICENSE"
 
@@ -74,14 +74,14 @@ identifiers:
 
 preferred-citation:
   type: software
-  title: "Robust Halley's Method for the Chord-Length Parameter L in Clothoid G^1 Hermite Interpolation"
+  title: "A Verified-Azimuth, Zero-Friction Halley Solver for the Chord-Length Parameter L in Clothoid G^1 Hermite Interpolation"
   authors:
     - given-names: Jeroen
       family-names: Bloemscheer
       affiliation: "Merkator Group"
       email: jeroen.bloemscheer@merkator.com
-  version:      "1.0.2"
+  version:      "1.0.3"
   year:         2026
-  date-released: 2026-05-12
+  date-released: 2026-05-16
   url:          "https://github.com/grootstebozewolf/clothoid-halley-coq"
   doi:          "10.5281/zenodo.20128415"
