@@ -112,6 +112,58 @@ data/LICENSE_DATA.txt for the full attribution notice.  The strict licence
 stated above governs the remainder of the repository and is not extended
 to those two files.
 
+CROSS-CORPUS BSD-3-CLAUSE BRIDGE
+================================
+
+The paper accompanying this Work cites specific named theorems and
+statements in the BSD-3-Clause licensed repository
+
+    NetTopologySuite.Proofs
+    https://github.com/grootstebozewolf/NetTopologySuite.Proofs
+
+(the "Sibling Corpus") as scholarly references in support of the
+azimuth and turning-angle identities on which the paper's residual
+derivation and safety heuristics rest.
+
+The Sibling Corpus is independent of this Work, licensed separately
+under the BSD-3-Clause licence, and governed exclusively by the terms
+of that licence.  Nothing in this LICENSE file is intended to extend
+the proprietary terms of this Work to the Sibling Corpus, nor to
+restrict the freedoms that BSD-3-Clause grants to users of the Sibling
+Corpus.
+
+For clarity:
+
+  1. The theorem statements, function signatures, and other identifying
+     excerpts of the Sibling Corpus that the paper reproduces under
+     permission 2 (SCHOLARLY CITATION) of this LICENSE remain governed
+     by the BSD-3-Clause licence of the Sibling Corpus.  Reproduction
+     under this LICENSE is an additional permission for the paper's
+     proprietary context, not a substitution of governing licence for
+     the underlying material.
+
+  2. Readers of the paper who wish to use, copy, modify, redistribute,
+     or build upon the Sibling Corpus itself should consult the
+     LICENSE file of that repository.  No permission to do any of those
+     things is granted by, or required from, this LICENSE.
+
+  3. The "NO USE FOR TRAINING OF AI / MACHINE-LEARNING SYSTEMS"
+     reservation above applies to this Work only.  It does not extend
+     to the Sibling Corpus, whose AI / ML usage is governed by the
+     terms of the BSD-3-Clause licence and any reservations the
+     Sibling Corpus itself makes.
+
+  4. Scholarly analysis of the citation relationship between the paper
+     and the Sibling Corpus -- including comparing the paper's
+     proprietary argument to the Sibling Corpus's BSD-licensed
+     statements for the purposes of academic study, peer review, or
+     reproduction of paper results under permission 3 of this LICENSE
+     -- is within the permitted uses of this Work and is not a
+     prohibited activity under the AI / ML reservation, provided that
+     such analysis does not itself constitute training or development
+     of an AI / ML system as defined in clause (a) of that
+     reservation.
+
 NO WARRANTY
 ===========
 
