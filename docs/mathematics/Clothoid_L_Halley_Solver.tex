@@ -23,7 +23,7 @@
 \begin{abstract}
 Clothoid (Euler-spiral) transitions join straight track to circular arcs in railway alignment, in road design, and in GIS pipelines that work with curve-continuous geometry. Recovering the arc length from endpoint and curvature data is a routine operation in those pipelines. This paper presents a Halley-method solver for that operation. The problem is formulated as a single scalar nonlinear residual in the arc-length parameter $L$, built from six moment integrals over $[0,1]$ that are evaluated by 32-point Gauss--Legendre quadrature. Halley's iteration delivers cubic convergence; four safety heuristics --- a derivative-sign guard, a denominator threshold, positivity damping, and a relative convergence test --- prevent divergence on difficult inputs.
 
-Reference implementations in Python, C\# (.NET 8), Java 21, and TypeScript (Node.js) produce bit-identical iteration counts and arc-length solutions agreeing within \SI{1}{nm}. Benchmarks on 9{,}058 real ``Overgangsboog'' transitions from the public ProRail Spoorgeometrie service confirm that Halley converges in a mean of 2.28 iterations against Newton's 2.92. Median solve times reach \SI{0.59}{\micro\second} on .NET 8. The derivative identities underlying the residual are cross-verified symbolically with SymPy and machine-checked in Coq using the Coquelicot real-analysis library, with no \texttt{Admitted} or \texttt{Axiom} declarations. The approach extends the Bertolazzi--Frego clothoid-fitting framework by working directly in $L$ rather than the transformed parameter $A$.
+Reference implementations in Python, C\# (.NET 8), Java 21, and TypeScript (Node.js) produce bit-identical iteration counts and arc-length solutions agreeing within \SI{1}{nm}. Benchmarks on 9{,}058 real ``Overgangsboog'' transitions from the public ProRail Spoorgeometrie service confirm that Halley converges in a mean of 2.28 iterations against 2.92 for a Newton solver on the same residual and the same $L_0 = d$ initial guess (this is a same-formulation comparison, not a comparison against the Bertolazzi--Frego reference solver, whose closed-form starting point already converges in fewer than four iterations across the parameter space). Median solve times reach \SI{0.59}{\micro\second} on .NET 8. The derivative identities underlying the residual---the calculus behind $f(L)$, not the quadrature, the solver, or its convergence---are cross-verified symbolically with SymPy and machine-checked in Coq using the Coquelicot real-analysis library, with no \texttt{Admitted} or \texttt{Axiom} declarations. The approach extends the Bertolazzi--Frego clothoid-fitting framework by working directly in $L$ rather than the transformed parameter $A$.
 \end{abstract}
 
 \section{Introduction}
@@ -74,6 +74,8 @@ T &= \int_0^1 \psi(\tau)\sin(L\psi(\tau))\,d\tau, \\
 S_{2c} &= \int_0^1 \psi(\tau)^2 \cos(L\psi(\tau))\,d\tau, &
 S_{2s} &= \int_0^1 \psi(\tau)^2 \sin(L\psi(\tau))\,d\tau.
 \end{align}
+The integrands are smooth on $[0,1]$ (compositions of low-degree polynomials with sine and cosine), and on the monotone branch the phase $L\psi(\tau)$ is bounded by $\pi$, so the integrands carry no near-singular or highly oscillatory behaviour. A 32-point Gauss--Legendre rule therefore resolves them to within a few units of machine epsilon---several orders of magnitude below both the $10^{-13}$ solver convergence tolerance and the $10^{-9}$~m cross-language agreement reported in Sections~\ref{sec:bench}--\ref{sec:verification}---so quadrature error is not a limiting factor in any reported result. Far fewer nodes would in fact suffice; 32 is retained as a conservative fixed budget that avoids per-case adaptivity and keeps the moment cache identical across the four language implementations.
+
 Let $r^2 = P^2 + Q^2$. The chord-length residual is the scalar function
 \begin{equation}
 f(L) = L^2 r^2 - d^2. \label{eq:residual}
@@ -112,7 +114,7 @@ Halley's method is the order-two member of the Householder family of root-findin
 Because the integrals required for $f''$ share their Gauss--Legendre cache with the integrals for $f$ and $f'$, Halley's per-iteration cost is dominated by two additional dot products rather than additional quadrature passes, and the iteration-count saving (Section~\ref{sec:bench}) translates directly into wall-time saving on every compiled runtime measured in Section~\ref{sec:bench}.
 
 \subsection{Safety Heuristics (Production Robustness)}
-Pure Halley iteration can diverge or produce non-physical (negative) steps on difficult instances. The following safeguards are therefore embedded in the implementation; they have proven essential on real railway data:
+Pure Halley iteration can diverge or produce non-physical (negative) steps on difficult instances. The following safeguards are therefore embedded in the implementation as a defensive net. It should be stated plainly that on the well-conditioned ProRail corpus of Section~\ref{sec:bench} none of them was ever triggered---every case converged monotonically within four iterations---so their value is for inputs outside the railway-grade regime (near-degenerate or non-monotone-branch configurations) rather than something demonstrated by the benchmark in this paper:
 \begin{enumerate}
     \item \textbf{Convergence test}: if $|f(L)| < \varepsilon \cdot \max(d^2, 1)$ with $\varepsilon = 10^{-13}$, return.
     \item \textbf{Derivative sign guard}: if $f' \le 0$, inflate $L \leftarrow 1.5 L$ and continue.
@@ -187,24 +189,46 @@ The L-formulation presented here is mathematically equivalent but offers several
 \begin{itemize}
     \item \textbf{Direct geometric meaning}: $L$ is the physically meaningful arc length; no post-processing conversion is required.
     \item \textbf{Explicit, verified derivatives}: the six-moment formulation yields closed-form $f''(L)$ that can be cross-checked symbolically.
-    \item \textbf{Strong safety net}: the four heuristics listed in Section~3 are exercised on the full 9{,}058-record ProRail corpus; divergence has not been observed and every case converges within four iterations of the Halley solver.
+    \item \textbf{Strong safety net}: the four heuristics listed in Section~3 are present throughout the full 9{,}058-record ProRail corpus run; no divergence was observed and every case converged within four iterations of the Halley solver. None of the safeguards was triggered on this corpus---they are a defensive provision for out-of-regime inputs, not a feature exercised by this data.
     \item \textbf{Multi-language verified corpus}: identical numeric behaviour across three languages provides an independent correctness oracle.
 \end{itemize}
 
-No fundamentally superior solver (e.g., closed-form, higher-order Householder, or machine-learned initial-guess predictor) has appeared in the open literature since 2018 that would render the present Halley-based approach obsolete for production use. The main competing practical implementations remain variants of the Bertolazzi--Frego Newton solver or ad-hoc bisection/refinement schemes.
+To the best of our knowledge, and within the literature surveyed for this paper, no fundamentally superior solver (e.g., closed-form, higher-order Householder, or machine-learned initial-guess predictor) has appeared since 2018 that would render the present Halley-based approach obsolete for production use; we make no claim regarding unpublished or domain-specific work outside that survey. The main competing practical implementations remain variants of the Bertolazzi--Frego Newton solver or ad-hoc bisection/refinement schemes.
 
 The Bertolazzi--Frego $A$-formulation should still be preferred in two regimes: (i) when the application has to solve coupled $G^2$ or higher continuity problems in which $A$, the curvature change, or the splitting point are themselves unknowns and a multi-parameter Newton system is the natural setting~\citep{Bertolazzi2018}; and (ii) when the explicit closed-form initial-guess function constructed in~\citep{Bertolazzi2013arxiv} is needed to escape regimes where the present paper's $L_0 = d$ initial guess is far from the basin of attraction. The $L$-formulation presented here is targeted at the more common $G^1$ single-segment use case (railway transitions, GIS map matching, single-clothoid CAD primitives) where those expansions are not required and arc length is the variable the surrounding pipeline already needs.
 
 \section{Formal Verification}
 \label{sec:verification}
 
-The analytical foundation of the solver---the four primitive integral derivatives and the residual derivatives in equations~\eqref{eq:deriv1} and~\eqref{eq:deriv2}---has been formalised and machine-checked in Coq using the Coquelicot real-analysis library~\citep{Boldo2015}. The development is approximately 720 lines of Coq and contains no \texttt{Admitted} or \texttt{Axiom} declarations; it has been verified to compile cleanly under Coq 8.13.1 and Coq 8.20.1 with Coquelicot~3.x.
+The analytical foundation of the solver---the four primitive integral derivatives and the residual derivatives in equations~\eqref{eq:deriv1} and~\eqref{eq:deriv2}---has been formalised and machine-checked in Coq using the Coquelicot real-analysis library~\citep{Boldo2015}. The development comprises approximately 1{,}290 lines of Coq across three files---\texttt{coq/Clothoid\_L.v} (the chord-length $L$-formulation), \texttt{coq/Clothoid.v}, and \texttt{coq/ClothoidPolish.v} (the transformed-parameter $A$-formulation)---and contains no \texttt{Admitted} or \texttt{Axiom} declarations; it has been verified to compile cleanly under Coq 8.13.1 and Coq 8.20.1 with Coquelicot~3.x (pinned to Coquelicot~3.4.3 in the reproducible Docker toolchain).
 
 The four primitive identities $P'(L) = -T(L)$, $Q'(L) = R(L)$, $R'(L) = -S_{2s}(L)$, $T'(L) = S_{2c}(L)$ are proved via differentiation under the integral sign, invoking Coquelicot's \texttt{is\_derive\_RInt\_param\_aux} lemma. This requires four hypotheses for each integral: pointwise differentiability of the integrand with respect to~$L$, joint continuity of the parameter-derivative integrand in~$(L,\tau)$, local integrability of the original integrand in a neighbourhood of the evaluation point, and integrability of the parameter-derivative integrand at the evaluation point. Each hypothesis is discharged by elementary continuity and integrability lemmas for compositions of polynomials with sine and cosine.
 
 The residual identity~\eqref{eq:deriv1} for $f'(L)$ is established by direct composition of the product and sum rules using Coquelicot's \texttt{is\_derive\_plus}, \texttt{is\_derive\_mult}, and \texttt{is\_derive\_minus} lemmas, with explicit type annotations to navigate Coquelicot's generic algebraic operators versus Coq's native real-number operators. The second-derivative identity~\eqref{eq:deriv2} is proved by applying Coquelicot's \texttt{auto\_derive} tactic to the function $f'(L)$, which produces nine \texttt{ex\_derive} side conditions and a goal containing four \texttt{Derive} placeholders. The side conditions are discharged from the existence lemmas \texttt{ex\_derive\_P\_int}, \texttt{ex\_derive\_Q\_int} and the value lemmas \texttt{is\_derive\_R}, \texttt{is\_derive\_T}; the \texttt{Derive} placeholders are then rewritten with the corresponding integral-level identities, after which the resulting polynomial equation in $P$, $Q$, $R$, $T$, $S_{2c}$, $S_{2s}$, and~$L$ is discharged by Coq's \texttt{ring} decision procedure for commutative rings.
 
-The complete Coq development is included as a reproducible artifact alongside the source repository (file \texttt{coq/Clothoid\_L.v}); building it requires only \texttt{coqc} and Coquelicot, with no external dependencies. Listing~\ref{lst:coq} shows the proof script for the second-derivative theorem; the full file is available at the repository link in Section~\ref{sec:conclusion}.
+Beyond the chord-length ($L$) identities, the companion files \texttt{coq/Clothoid.v} and \texttt{coq/ClothoidPolish.v} machine-check the analogous derivative identities for the Bertolazzi--Frego transformed parameter $A$ (theorems \texttt{f\_prime\_eq} and \texttt{f\_second\_eq}, together with the moment-notation restatements \texttt{f\_prime\_moment\_notation} and \texttt{f\_second\_moment\_notation}), so the derivative-exactness guarantee covers both parametrizations rather than the $L$-formulation alone. Table~\ref{tab:coqmap} records the correspondence between the analytic results stated in this paper and the named Coq theorems.
+
+\begin{table}[H]
+\centering
+\caption{Correspondence between the paper's analytic results and the machine-checked Coq theorems.}
+\label{tab:coqmap}
+\begin{tabular}{lll}
+\toprule
+Paper result & Coq theorem & File \\
+\midrule
+$P'(L) = -T(L)$            & \texttt{is\_derive\_P} & \texttt{Clothoid\_L.v} \\
+$Q'(L) = R(L)$             & \texttt{is\_derive\_Q} & \texttt{Clothoid\_L.v} \\
+$R'(L) = -S_{2s}(L)$       & \texttt{is\_derive\_R} & \texttt{Clothoid\_L.v} \\
+$T'(L) = S_{2c}(L)$        & \texttt{is\_derive\_T} & \texttt{Clothoid\_L.v} \\
+Eq.~\eqref{eq:deriv1}, $f'(L)$  & \texttt{f\_L\_prime\_eq}  & \texttt{Clothoid\_L.v} \\
+Eq.~\eqref{eq:deriv2}, $f''(L)$ & \texttt{f\_L\_second\_eq} & \texttt{Clothoid\_L.v} \\
+$A$-formulation $f'(A)$    & \texttt{f\_prime\_eq}  & \texttt{Clothoid.v} \\
+$A$-formulation $f''(A)$   & \texttt{f\_second\_eq} & \texttt{Clothoid.v} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The complete Coq development is included as a reproducible artifact alongside the source repository (files \texttt{coq/Clothoid\_L.v}, \texttt{coq/Clothoid.v}, and \texttt{coq/ClothoidPolish.v}); building it requires only \texttt{coqc} and Coquelicot, with no external dependencies. Listing~\ref{lst:coq} shows the proof script for the second-derivative theorem; the full file is available at the repository link in Section~\ref{sec:conclusion}.
 
 \begin{figure}[H]
 \small
