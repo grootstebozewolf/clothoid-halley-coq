@@ -164,6 +164,56 @@ For clarity:
      of an AI / ML system as defined in clause (a) of that
      reservation.
 
+BSD-3-CLAUSE BRIDGE CARVE-OUT
+=============================
+
+This carve-out, dated 2026-05-30, is an additional permission granted in
+addition to the base terms above.  It is granted specifically and solely
+for use in the BSD-3-Clause licensed repository
+
+    NetTopologySuite.Proofs
+    https://github.com/grootstebozewolf/NetTopologySuite.Proofs
+
+(the "Sibling Corpus", as defined in the CROSS-CORPUS section above).
+
+1. STATEMENTS CARVED OUT.  The mathematical statements -- that is, the
+   Coq theorem names, their types, and their proof terms -- of every
+   top-level Theorem, Lemma, and Corollary in the following files may be
+   cited, imported, restated as Axioms, and redistributed as part of the
+   Sibling Corpus under the BSD-3-Clause licence governing that project:
+
+     coq/Clothoid_L.v
+     coq/Clothoid.v
+     coq/ClothoidPolish.v
+
+   The load-bearing statements for the Sibling Corpus bridge are, for the
+   avoidance of doubt:
+
+     - Clothoid_L.f_L_prime_eq        (first derivative of the
+                                       chord-length residual fL)
+     - Clothoid_L.f_L_second_eq       (second derivative of the
+                                       chord-length residual)
+     - Clothoid.f_prime_eq            (A-parametrization analogue)
+     - Clothoid.f_second_eq           (A-parametrization analogue)
+
+2. REDISTRIBUTION.  The axiom statements restated under clause 1 may be
+   distributed under BSD-3-Clause as part of the Sibling Corpus.
+
+3. WHAT IS NOT GRANTED.  This carve-out covers only the mathematical
+   statements named above.  The proof scripts' tactic text, the Coq
+   source files themselves, the implementations (C#, Java, Python,
+   TypeScript), the data files, the manuscript, and all other content
+   remain governed by the proprietary terms above.  Nothing here grants
+   any right to those materials.
+
+4. NO CONVERGENCE RESULT IS CARVED OUT.  For accuracy of attribution:
+   this Work proves the derivative identities consumed by a Halley-on-L
+   iteration; it does NOT formalise the convergence or existence result
+   for that iteration (see coq/Clothoid.v, which states this expressly).
+   Any convergence statement in the Sibling Corpus is a separate,
+   classical result (Ostrowski / Schroeder) and must not be attributed
+   to a proof in this Work.
+
 NO WARRANTY
 ===========
 
