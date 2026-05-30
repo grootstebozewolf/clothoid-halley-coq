@@ -186,6 +186,15 @@ for use in the BSD-3-Clause licensed repository
      coq/Clothoid.v
      coq/ClothoidPolish.v
 
+   Because a theorem type is not self-contained, this carve-out also
+   covers the top-level Definitions on which the carved-out statement
+   types depend, to the extent necessary to restate those types
+   faithfully:
+
+     psi, P_int, Q_int, R_int, T_int, S2c_int, S2s_int, fL, fpL
+                                                  (coq/Clothoid_L.v)
+     phi                                          (coq/Clothoid.v)
+
    The load-bearing statements for the Sibling Corpus bridge are, for the
    avoidance of doubt:
 
