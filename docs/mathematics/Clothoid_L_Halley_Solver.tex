@@ -181,6 +181,33 @@ Halley's method reduces iteration count by 22\% on real railway data (2.28 vs.\ 
 \caption{ProRail benchmark over 9{,}058 real clothoid transitions: average iterations (left) and median per-solve time (right, log scale) for Halley vs.\ Newton across the four implementations.}
 \end{figure}
 
+\subsection{Initial-guess sensitivity and the dimensionless convergence field}
+\label{sec:initguess}
+
+The iteration counts in Table~\ref{tab:benchmark} are properties of the solver \emph{and} of the corpus, and the two can be separated cleanly by exploiting the symmetries of the residual. Because $L\psi(\tau) = a\tau + (b-a)\tau^2/2$ with the dimensionless curvatures
+\[
+    a := \kappa_0 L, \qquad b := \kappa_1 L,
+\]
+the chord ratio $r = \sqrt{P^2+Q^2}$ is a function $r(a,b)$ alone, $d/L = r(a,b)$, and the entire solver dynamics---hence the iteration count---is a scalar field $N(a^\ast,b^\ast)$ over the monotone square $|a|,|b|\le\pi$, where $(a^\ast,b^\ast)=(\kappa_0 L^\ast,\kappa_1 L^\ast)$ is the dimensionless solution. Three physical parameters $(\kappa_0,\kappa_1,L^\ast)$ thus collapse to a single two-dimensional field. That field is moreover invariant under the Klein-four group $r(a,b)=r(b,a)=r(-a,-b)=r(-b,-a)$ (arc reversal and the mirror clothoid), so only the wedge $\{a\ge|b|\}$---one quarter of the square---need be sampled; the remaining three quarters are exact images (a measured $3.97\times$ compute saving, verified to agree with direct recomputation to within one iteration on a thin set of stopping-threshold cells).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\textwidth]{initguess_iterations.png}
+\caption{Iteration count as a function of the dimensionless curvatures $(a,b)=(\kappa_0 L^\ast,\kappa_1 L^\ast)$ over the monotone square, for Halley (left) and Newton (right) from $L_0=d$. Iso-iteration contours run anti-diagonally; the count grows from unity at the centre to $14$ (Halley) and $21$ (Newton) at the $|a|=|b|=\pi$ corners. The white cloud is the full $9{,}058$-record ProRail corpus, which occupies only $|a|\le0.38$, $|b|\le0.43$---roughly $12\%$ of the way to the soundness boundary.}
+\label{fig:initguess}
+\end{figure}
+
+Two consequences follow. First, the corpus lives in the near-straight regime where $r(a,b)\approx1$, so $L_0=d\approx L^\ast$ and the initial guess is almost on the root; the harness independently reproduces the published corpus means (Halley $2.28$, Newton $2.92$). The low iteration counts are therefore a property of the data's gentle dimensionless curvature as much as of the method. Second, the count is governed by initial-guess quality: over a uniform sweep of the square the mean is \emph{minimised} at the policy $L_0=c\,d$ with $c=1$, and on the corpus the mean rises from $2.28$ at $c=1$ to $4.0$ at $c=0.75$ or $c=1.25$---a $25\%$ perturbation of the initial guess nearly doubles the work (Figure~\ref{fig:initguessl0}). The choice $L_0=d$ is thus well calibrated for this regime rather than incidental, and a starting point further from the basin (the regime in which the Bertolazzi--Frego closed-form guess is advantageous) would erode the advantage.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\textwidth]{initguess_l0_sensitivity.png}
+\caption{Sensitivity of the mean iteration count to the initial guess $L_0=c\,d$, over a uniform sweep of the monotone square and over the ProRail corpus. Both curves are minimised at $c=1$ ($L_0=d$).}
+\label{fig:initguessl0}
+\end{figure}
+
+This reduction also exposes the one place where the scaling symmetry is not exact: the convergence test $|f|<\varepsilon\max(d^2,1)$ contains a floor constant that is not scale-invariant. Sweeping the physical scale $L^\ast$ across seven decades at fixed $(a,b)$, the iteration count is constant wherever $d^2\gg1$ and changes by at most one iteration only for sub-metre geometries; the railway regime (tens to hundreds of metres) lies entirely in the scale-invariant region. The experiment, its symmetry derivation, and the supporting figures (\texttt{initguess\_collapse.png}, \texttt{initguess\_scaling.png}) are archived with the source as \texttt{python/clothoid\_initial\_guess\_experiment.py} and \texttt{docs/initial-guess-experiment.md}.
+
 \section{Comparison with State-of-the-Art}
 
 The seminal work of \citet{Bertolazzi2015} remains the reference implementation for the $G^1$ Hermite case: it reduces the three-equation interpolation system to a single nonlinear equation in a transformed parameter $A$ and solves it with un-damped Newton--Raphson, using the explicit closed-form initial-guess function constructed in \citep{Bertolazzi2013arxiv} to obtain a starting point that converges in fewer than four iterations across the full parameter space (and using a separate family of asymptotic expansions in the same reference to evaluate the Fresnel-related integrals stably near straight-line and circular-arc configurations). The curvature-continuous $G^2$ extension of \citet{Bertolazzi2018} treats a structurally harder problem --- a single-clothoid or two-clothoid solution does not always exist --- and proposes a three-arc fitting scheme that recasts a nonlinear system of eight equations in ten unknowns down to two equations in four unknowns, solved with the standard Newton method in at most five iterations. An alternative numerical strategy, integrating the clothoid as an initial-value problem with Runge--Kutta-style schemes, is given by \citet{VazquezMendez2015}; this approach is attractive when the moments are not directly required but does not yield the explicit second-derivative form on which Halley's method depends. A complementary direction in numerical analysis aims to preserve geometric or algebraic invariants of the underlying flow across integration steps; the contact variational integrators of~\citet{Seri2019contact} for Hamiltonian-style systems are a recent example. The present paper takes the orthogonal route of formally verifying the algebraic identities behind a residual root-finder rather than preserving structure across integration steps.
