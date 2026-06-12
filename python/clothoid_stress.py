@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 Merkator Group
-# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
+# SPDX-License-Identifier: EUPL-1.2
 """
 Heavy stress test:
   * 101x101 grid of (phi0, phi1) in (-pi+eps, pi-eps)^2  -> ~10k samples

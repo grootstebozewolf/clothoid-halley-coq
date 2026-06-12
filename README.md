@@ -8,10 +8,10 @@ formalisation of the underlying derivative identities, three production
 implementations (C# / Java / TypeScript), and a 9,058-record real-world
 benchmark on the ProRail Spoorgeometrie dataset.
 
-> **Repository status: public — proprietary (source-available).**
-> The full source is open for reading and academic evaluation. It is
-> **not open source**: see the [License](#license) section below before
-> running, modifying, or redistributing any of it.
+> **Repository status: open source — [EUPL-1.2](LICENSE).**
+> The full source — code, Coq proofs, documentation, and manuscript —
+> is licensed under the European Union Public Licence v. 1.2; see the
+> [License](#license) section below.
 > The accompanying paper is at
 > [`docs/mathematics/Clothoid_L_Halley_Solver.pdf`](docs/mathematics/Clothoid_L_Halley_Solver.pdf).
 
@@ -106,32 +106,20 @@ Python 3.14 + NumPy + SciPy + Matplotlib; .NET 8 / .NET 10 SDK; OpenJDK 21
 
 ## License
 
-This repository is **public** but **not open source**.
+Licensed under the **European Union Public Licence v. 1.2 (EUPL-1.2)**.
 
 - All code, documentation, build configuration, and the manuscript text
-  are covered by a proprietary licence — see [LICENSE](LICENSE) — that
-  grants narrow permissions for *reading*, *academic citation*, and
-  *unmodified execution to reproduce the paper's results*. All other
-  uses (commercial use, redistribution, derivative works) require a
-  separate written licence from Merkator Group.
+  are licensed under the EUPL-1.2 — see [LICENSE](LICENSE). Copyright
+  (c) 2026 Merkator Group. The Halley iteration proofs for clothoid
+  $G^1$ Hermite interpolation are provided for integration into formal
+  geometry corpora such as
+  [NetTopologySuite.Proofs](https://github.com/grootstebozewolf/NetTopologySuite.Proofs)
+  (itself BSD-3-Clause licensed and governed exclusively by its own
+  licence).
 - The two data files `data/prorail_clothoids.json.gz` and
   `data/golden_vectors.json` are derived from ProRail Spoorgeometrie
   and are redistributed under **CC BY 4.0** (see
   [data/LICENSE_DATA.txt](data/LICENSE_DATA.txt)). That licence applies
   to those files only; it is not extended to the surrounding code.
-
-### No AI / ML training
-
-Use of this repository — in whole or in part, in any form, by any
-party, including automated crawlers — to train, fine-tune, retrieval-
-augment, distil, evaluate, benchmark, or otherwise develop any
-artificial-intelligence or machine-learning system, or to assemble any
-dataset for those purposes, is **expressly prohibited**. This is an
-explicit text-and-data-mining reservation within the meaning of
-Article 4(3) of the EU DSM Directive (Directive (EU) 2019/790) and the
-corresponding opt-outs in other jurisdictions. See the **"NO USE FOR
-TRAINING OF AI / MACHINE-LEARNING SYSTEMS"** section of
-[LICENSE](LICENSE) for the full terms, including the explicit
-preservation of access logs as evidence in subsequent proceedings.
 
 Licensing enquiries: <jeroen.bloemscheer@merkator.com>.
