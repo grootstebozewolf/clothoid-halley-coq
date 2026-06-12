@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 Merkator Group
-# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
+# SPDX-License-Identifier: EUPL-1.2
 """
 Render the two benchmark bar-charts that appear in the paper from the
 measured numbers in data/benchmark_results.json (produced by

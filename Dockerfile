@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 Merkator Group
-# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
+# SPDX-License-Identifier: EUPL-1.2
 #
 # Full reproducibility toolchain for clothoid-halley-coq.
 #
@@ -39,7 +39,7 @@ FROM ubuntu:${UBUNTU_VERSION}
 LABEL org.opencontainers.image.title="clothoid-halley-coq toolchain" \
       org.opencontainers.image.description="Coq 8.20.1, Python, .NET 8, JDK 21, Node 22, TeX Live for clothoid-halley-coq reproduction" \
       org.opencontainers.image.source="https://github.com/grootstebozewolf/clothoid-halley-coq" \
-      org.opencontainers.image.licenses="LicenseRef-Merkator-Proprietary-NoAITraining" \
+      org.opencontainers.image.licenses="EUPL-1.2" \
       org.opencontainers.image.authors="Jeroen Bloemscheer <jeroen.bloemscheer@merkator.com>"
 
 ENV DEBIAN_FRONTEND=noninteractive \

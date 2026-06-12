@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 Merkator Group
-# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
+# SPDX-License-Identifier: EUPL-1.2
 """
 Fetch all 'Overgangsboog' (clothoid transition) records from the public
 ProRail Spoorgeometrie ArcGIS FeatureServer and write a normalised

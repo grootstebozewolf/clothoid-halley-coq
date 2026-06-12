@@ -1,5 +1,5 @@
 (* SPDX-FileCopyrightText: 2026 Merkator Group *)
-(* SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining *)
+(* SPDX-License-Identifier: EUPL-1.2 *)
 
 (** Moment-notation polishing for the Bertolazzi-Frego residual.
 

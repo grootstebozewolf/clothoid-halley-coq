@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 Merkator Group
-# SPDX-License-Identifier: LicenseRef-Merkator-Proprietary-NoAITraining
+# SPDX-License-Identifier: EUPL-1.2
 #
 # Citation metadata in Citation File Format (CFF) v1.2.0.
 # GitHub renders this automatically as a "Cite this repository" button
@@ -23,9 +23,10 @@ authors:
 repository-code: "https://github.com/grootstebozewolf/clothoid-halley-coq"
 url:             "https://github.com/grootstebozewolf/clothoid-halley-coq"
 
-version:         "1.0.3"
-date-released:    2026-05-16
+version:         "1.1.0"
+date-released:    2026-06-12
 
+license:        EUPL-1.2
 license-url:    "https://github.com/grootstebozewolf/clothoid-halley-coq/blob/main/LICENSE"
 
 keywords:
@@ -80,8 +81,8 @@ preferred-citation:
       family-names: Bloemscheer
       affiliation: "Merkator Group"
       email: jeroen.bloemscheer@merkator.com
-  version:      "1.0.3"
+  version:      "1.1.0"
   year:         2026
-  date-released: 2026-05-16
+  date-released: 2026-06-12
   url:          "https://github.com/grootstebozewolf/clothoid-halley-coq"
   doi:          "10.5281/zenodo.20128415"
