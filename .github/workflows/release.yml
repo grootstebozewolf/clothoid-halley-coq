@@ -1,0 +1,23 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          body: |
+            Clothoid Halley solver ${{ github.ref_name }}.
+            
+            See README for the four-language golden-vector suite.
+            DOI: https://doi.org/10.5281/zenodo.20128415
