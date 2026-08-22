@@ -59,7 +59,7 @@ Zero-runtime-dependency ESM module + `node:test` golden-vector suite + benchmark
 ### `docs/mathematics/` — Academic paper
 
 - `Clothoid_L_Halley_Solver.tex` — the LaTeX source.
-- `Clothoid_L_Halley_Solver.pdf` — the rendered paper (7 pages, includes the formal-verification section and the cross-language benchmark table).
+- `Clothoid_L_Halley_Solver.pdf` — the rendered paper (includes the formal-verification section and the cross-language benchmark table). Rebuild from the `.tex` with the commands in End-to-end reproduction if the PDF and source have diverged.
 - `references.bib` — the bibliography (Bertolazzi & Frego 2015 / 2018, Coquelicot, Householder, Vázquez-Méndez & Casal).
 - `generate_benchmark_graphs.py` — renders the bar charts from `data/benchmark_results.json`.
 
