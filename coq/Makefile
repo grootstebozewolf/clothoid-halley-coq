@@ -1,24 +1,38 @@
-# Build the Coq proof file.
-# Requires: Coq + Coquelicot in PATH (tested with Coq 8.13.1 + Coquelicot 3.x).
+# Build the Coq developments.
+# Halley residual files: Coq + Coquelicot (tested 8.13.1 / 8.20.1 + Coquelicot 3.x).
+# Distance.v / CompoundCurveKoc.v: stdlib Reals only (BSD-3-Clause; see LICENSE_BSD-3-Clause.txt).
 
 COQC ?= coqc
 COQCHK ?= coqchk
 
-all: Clothoid.vo
+HALLEY_VO = Clothoid.vo Clothoid_L.vo ClothoidPolish.vo
+KOC_VO    = Distance.vo CompoundCurveKoc.vo
+
+all: $(HALLEY_VO) $(KOC_VO)
 
 Clothoid.vo: Clothoid.v
 	$(COQC) Clothoid.v
 
-check: Clothoid.vo
-	$(COQCHK) -silent -o Clothoid
+Clothoid_L.vo: Clothoid_L.v
+	$(COQC) Clothoid_L.v
 
-audit: Clothoid.vo
-	@echo "----- axioms required by f_prime_eq -----"
-	@echo 'Require Import Clothoid. Print Assumptions f_prime_eq.' | $(COQC) -R . "" /dev/stdin
-	@echo "----- axioms required by f_second_eq -----"
-	@echo 'Require Import Clothoid. Print Assumptions f_second_eq.' | $(COQC) -R . "" /dev/stdin
+ClothoidPolish.vo: ClothoidPolish.v
+	$(COQC) ClothoidPolish.v
+
+Distance.vo: Distance.v
+	$(COQC) Distance.v
+
+CompoundCurveKoc.vo: CompoundCurveKoc.v Distance.vo
+	$(COQC) CompoundCurveKoc.v
+
+check: all
+	$(COQCHK) -silent -o Clothoid
+	$(COQCHK) -silent -o Clothoid_L
+	$(COQCHK) -silent -o ClothoidPolish
+	$(COQCHK) -silent -o Distance
+	$(COQCHK) -silent -o CompoundCurveKoc
 
 clean:
-	rm -f Clothoid.vo Clothoid.glob Clothoid.vos Clothoid.vok .Clothoid.aux
+	rm -f *.vo *.glob *.vos *.vok .*.aux
 
-.PHONY: all check audit clean
+.PHONY: all check clean

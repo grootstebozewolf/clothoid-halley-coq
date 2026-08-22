@@ -8,10 +8,11 @@ formalisation of the underlying derivative identities, three production
 implementations (C# / Java / TypeScript), and a 9,058-record real-world
 benchmark on the ProRail Spoorgeometrie dataset.
 
-> **Repository status: open source — [EUPL-1.2](LICENSE).**
-> The full source — code, Coq proofs, documentation, and manuscript —
-> is licensed under the European Union Public Licence v. 1.2; see the
-> [License](#license) section below.
+> **Repository status: open source — [EUPL-1.2](LICENSE), with file-level exceptions.**
+> Code, Halley residual proofs, documentation, and manuscript are
+> licensed under the European Union Public Licence v. 1.2; two vendored
+> Coq files (`Distance.v`, `CompoundCurveKoc.v`) remain BSD-3-Clause.
+> See the [License](#license) section below.
 > The accompanying paper is at
 > [`docs/mathematics/Clothoid_L_Halley_Solver.pdf`](docs/mathematics/Clothoid_L_Halley_Solver.pdf).
 
@@ -21,15 +22,12 @@ benchmark on the ProRail Spoorgeometrie dataset.
 
 ### `coq/` — Formal verification
 
-Three Coq files; all compile cleanly under Coq 8.13.1 and Coq 8.20.1 with
-Coquelicot 3.x, pass `coqchk` with no `type-in-type`, no unsafe
-(co)fixpoints, no positivity holes, and **no `Admitted` or `Axiom`**
-beyond the four standard axioms used by Coquelicot itself (classical
-logic, decidable Dedekind reals, functional extensionality).
+Five Coq files. The three Halley-residual files compile under Coq 8.13.1 and Coq 8.20.1 with Coquelicot 3.x, pass `coqchk` with no `type-in-type`, no unsafe (co)fixpoints, no positivity holes, and **no `Admitted` or `Axiom`** beyond the four standard axioms used by Coquelicot itself (classical logic, decidable Dedekind reals, functional extensionality).
 
 - **`Clothoid.v`** — Bertolazzi–Frego $G^1$ residual $f(A) = Y_0(2A, \delta - A, \varphi_0)$. Proves $f'(A) = \int(t^2-t)\cos\varphi$ and $f''(A) = -\int(t^2-t)^2\sin\varphi$ via parameter-differentiation under the integral.
 - **`Clothoid_L.v`** — chord-length residual $f(L) = L^2(P^2 + Q^2) - d^2$. Proves the four integral-level derivatives $P' = -T$, $Q' = R$, $R' = -S_{2s}$, $T' = S_{2c}$, the first-derivative composite, and the closed (no `Admitted`) second-derivative composite via `auto_derive` + `Derive` rewrites + `ring`.
 - **`ClothoidPolish.v`** — moment-notation polish: proves $f'(A) = X_2 - X_1$ and the integral identity $-(Y_4 - 2 Y_3 + Y_2) = \int -(t^2-t)^2 \sin\varphi$.
+- **`Distance.v`**, **`CompoundCurveKoc.v`** — vendored from [NetTopologySuite.Proofs](https://github.com/grootstebozewolf/NetTopologySuite.Proofs) under **BSD-3-Clause** (see [coq/LICENSE_BSD-3-Clause.txt](coq/LICENSE_BSD-3-Clause.txt)). Stdlib Reals only. Koc 2015 closed-form clothoid end-angle $\theta(L)=L/(2R)$, frame isometry, and tangency-centre identities. Complementary to Halley-on-$L$: they consume a known transition length, they do not recover $L$.
 
 ```bash
 cd coq && make
@@ -108,14 +106,17 @@ Python 3.14 + NumPy + SciPy + Matplotlib; .NET 8 / .NET 10 SDK; OpenJDK 21
 
 Licensed under the **European Union Public Licence v. 1.2 (EUPL-1.2)**.
 
-- All code, documentation, build configuration, and the manuscript text
-  are licensed under the EUPL-1.2 — see [LICENSE](LICENSE). Copyright
-  (c) 2026 Merkator Group. The Halley iteration proofs for clothoid
-  $G^1$ Hermite interpolation are provided for integration into formal
-  geometry corpora such as
-  [NetTopologySuite.Proofs](https://github.com/grootstebozewolf/NetTopologySuite.Proofs)
-  (itself BSD-3-Clause licensed and governed exclusively by its own
-  licence).
+- Except as listed below, all code, documentation, build configuration,
+  and the manuscript text are licensed under the EUPL-1.2 — see
+  [LICENSE](LICENSE). Copyright (c) 2026 Merkator Group. The Halley
+  iteration proofs for clothoid $G^1$ Hermite interpolation are provided
+  for integration into formal geometry corpora such as
+  [NetTopologySuite.Proofs](https://github.com/grootstebozewolf/NetTopologySuite.Proofs).
+- **`coq/Distance.v` and `coq/CompoundCurveKoc.v` only** are vendored from
+  that sibling corpus and remain **BSD-3-Clause** — see
+  [coq/LICENSE_BSD-3-Clause.txt](coq/LICENSE_BSD-3-Clause.txt). That
+  licence applies to those two files only; it is not extended to the
+  surrounding EUPL-1.2 work.
 - The two data files `data/prorail_clothoids.json.gz` and
   `data/golden_vectors.json` are derived from ProRail Spoorgeometrie
   and are redistributed under **CC BY 4.0** (see
