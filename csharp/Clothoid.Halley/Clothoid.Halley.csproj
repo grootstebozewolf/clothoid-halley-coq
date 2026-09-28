@@ -9,6 +9,13 @@
     <LangVersion>latest</LangVersion>
     <RootNamespace>Clothoid.Halley</RootNamespace>
     <AssemblyName>Clothoid.Halley</AssemblyName>
+    <!--
+      SPDX expression for the packable assembly, not for this project file
+      (this file stays EUPL-1.2). Solver.cs is BSD-3-Clause; GaussLegendre.cs
+      is EUPL-1.2. AND means a consumer complies with both. It is not a
+      choice between the two licences.
+    -->
+    <PackageLicenseExpression>EUPL-1.2 AND BSD-3-Clause</PackageLicenseExpression>
   </PropertyGroup>
 
 </Project>
