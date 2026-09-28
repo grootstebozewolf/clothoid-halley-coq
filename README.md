@@ -10,7 +10,8 @@ benchmark on the ProRail Spoorgeometrie dataset.
 
 > **Repository status: open source — [EUPL-1.2](LICENSE), with file-level exceptions.**
 > Code, Halley residual proofs, documentation, and manuscript are
-> licensed under the European Union Public Licence v. 1.2; two vendored
+> licensed under the European Union Public Licence v. 1.2.
+> `csharp/Clothoid.Halley/Solver.cs` is BSD-3-Clause, and two vendored
 > Coq files (`Distance.v`, `CompoundCurveKoc.v`) remain BSD-3-Clause.
 > See the [License](#license) section below.
 > The accompanying paper is at
@@ -44,7 +45,7 @@ cd coq && make
 
 ### `csharp/` — C# (.NET 8) implementation
 
-`Clothoid.Halley` library + xUnit golden-vector tests + benchmark harness. See [csharp/README.md](csharp/README.md). Bit-identical to the Python reference on every case in the 9,058-record corpus (chord-length agreement within $10^{-9}$ m, iteration counts match exactly). Median Halley solve: **0.59 µs**.
+`Clothoid.Halley` library + xUnit golden-vector tests + benchmark harness. See [csharp/README.md](csharp/README.md). `Solver.cs` in that library is BSD-3-Clause; every other C# file stays EUPL-1.2. Bit-identical to the Python reference on every case in the 9,058-record corpus (chord-length agreement within $10^{-9}$ m, iteration counts match exactly). Median Halley solve: **0.59 µs**.
 
 ### `java/` — Java 21 implementation
 
@@ -112,6 +113,17 @@ Licensed under the **European Union Public Licence v. 1.2 (EUPL-1.2)**.
   iteration proofs for clothoid $G^1$ Hermite interpolation are provided
   for integration into formal geometry corpora such as
   [NetTopologySuite.Proofs](https://github.com/grootstebozewolf/NetTopologySuite.Proofs).
+- **`csharp/Clothoid.Halley/Solver.cs` only** is licensed under
+  **BSD-3-Clause**, copyright (c) 2026 Jeroen Bloemscheer. The file
+  header carries the SPDX identifier and the full BSD-3-Clause text, so
+  the file stays self-contained when copied verbatim. The same text is
+  in [LICENSES/BSD-3-Clause.txt](LICENSES/BSD-3-Clause.txt). This grant
+  does not cover `csharp/Clothoid.Halley/GaussLegendre.cs`, which
+  `Solver.cs` calls for its 32-point quadrature nodes and weights; that
+  file remains EUPL-1.2. A BSD-3-Clause consumer still needs an
+  equivalent quadrature table under terms that allow the copy. The C#
+  package metadata records `EUPL-1.2 AND BSD-3-Clause` because the
+  assembly ships both files.
 - **`coq/Distance.v` and `coq/CompoundCurveKoc.v` only** are vendored from
   that sibling corpus and remain **BSD-3-Clause** — see
   [coq/LICENSE_BSD-3-Clause.txt](coq/LICENSE_BSD-3-Clause.txt). That
