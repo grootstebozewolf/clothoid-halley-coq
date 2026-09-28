@@ -1,7 +1,7 @@
-// SPDX-FileCopyrightText: 2026 Jeroen Bloemscheer <jbloemscheer@gmail.com>
+// SPDX-FileCopyrightText: 2026 Merkator Group
 // SPDX-License-Identifier: BSD-3-Clause
 //
-// Copyright (c) 2026 Jeroen Bloemscheer <jbloemscheer@gmail.com>
+// Copyright (c) 2026 Merkator Group
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -29,9 +29,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-// Not part of the BSD-3-Clause grant above: Moments() reads the 32-point
-// nodes and weights from GaussLegendre in GaussLegendre.cs (this
-// directory). That file remains EUPL-1.2.
+// Quadrature nodes and weights are in GaussLegendre.cs in this directory,
+// also BSD-3-Clause, copyright (c) 2026 Merkator Group. Copy both files.
 
 using System.Runtime.CompilerServices;
 

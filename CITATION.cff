@@ -13,8 +13,9 @@
 # license below stays the single identifier EUPL-1.2. That is the
 # predominant licence of this software. File-level carve-outs are
 # additional obligations (SPDX AND), not alternative licences:
-#   csharp/Clothoid.Halley/Solver.cs            BSD-3-Clause
-#     copyright (c) 2026 Jeroen Bloemscheer
+#   csharp/Clothoid.Halley/Solver.cs and
+#   csharp/Clothoid.Halley/GaussLegendre.cs    BSD-3-Clause
+#     copyright (c) 2026 Merkator Group
 #   coq/Distance.v, coq/CompoundCurveKoc.v      BSD-3-Clause (vendored)
 #   data/prorail_clothoids.json.gz and
 #   data/golden_vectors.json                    CC-BY-4.0 (dataset)
@@ -23,8 +24,9 @@
 # "EUPL-1.2 AND BSD-3-Clause" is not a valid CFF license value, and
 # listing BSD-3-Clause beside EUPL-1.2 would mean the recipient could
 # drop the EUPL. Zenodo also accepts only a single license string.
-# The C# package, which ships Solver.cs together with EUPL-1.2 code,
-# uses PackageLicenseExpression EUPL-1.2 AND BSD-3-Clause instead.
+# The C# library package ships only those two BSD-3-Clause sources, so
+# its PackageLicenseExpression is BSD-3-Clause. The project file, tests,
+# and benchmark stay EUPL-1.2 and are not part of that assembly.
 
 cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
